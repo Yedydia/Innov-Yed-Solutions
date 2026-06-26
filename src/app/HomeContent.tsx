@@ -178,10 +178,10 @@ export default function LandingPage() {
         const advs = await advRes.json();
         if (Array.isArray(advs) && advs.length > 0) {
           const imageMap: Record<string, string> = {
-            "Excellence Technique": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=100",
-            "Approche Holistique": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=100",
-            "Impact Local & Global": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=100",
-            "Partenariat Durable": "https://images.unsplash.com/photo-1552581234-26160f608093?w=800&q=100",
+            "Expertise Technique": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=100",
+            "Innovation Continue": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=100",
+            "Support 24/7": "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=100",
+            "Résultats Mesurables": "https://images.unsplash.com/photo-1552581234-26160f608093?w=800&q=100",
           };
           const fallbackImages = Object.values(imageMap);
           setAdvantages(advs.map((a: any, i: number) => ({
@@ -456,7 +456,7 @@ export default function LandingPage() {
             <div key={item.title} className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-12 items-center mb-20 last:mb-0`}>
               <div className="flex-1 relative">
                 <div className="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl">
-                  <Image src={item.image} alt={item.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" loading="eager" priority className="object-cover" />
+                  <img src={item.image} alt={item.title} loading="eager" className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/30 to-transparent" />
                 </div>
                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-2xl bg-gradient-to-br from-cyan/20 to-violet/20 blur-2xl" />
