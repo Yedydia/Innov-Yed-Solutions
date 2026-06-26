@@ -30,15 +30,16 @@ export default function AcademiePage() {
     <div>
       <section className="relative py-32 overflow-hidden">
         <div className="absolute inset-0"><Image src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=2400&q=100" alt="" fill className="object-cover" priority sizes="100vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" /><div className="absolute inset-0 bg-gradient-to-br from-[#0B0F1A]/95 via-[#0B0F1A]/85 to-[#0B0F1A]/90" /><div className="absolute inset-0 bg-gradient-to-t from-[#0B0F1A]/90 via-[#0B0F1A]/70 to-transparent" /></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${pageColor}33, ${pageColor}66)` }}>
-              <GraduationCap className="w-7 h-7 text-white" />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${pageColor}33, ${pageColor}66)` }}>
+                <GraduationCap className="w-7 h-7 text-white" />
+              </div>
+              <span className="text-sm font-bold tracking-wider" style={{ color: pageColor }}>ACADÉMIE</span>
             </div>
-            <span className="text-sm font-bold tracking-wider" style={{ color: pageColor }}>ACADÉMIE</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 max-w-3xl" style={{ fontFamily: "var(--font-display)" }}>Académie <span className="gradient-text">Innov&apos;Yed</span></h1>
-          <p className="text-lg text-white/60 max-w-2xl mb-8">Montez en compétences avec nos formations certifiantes dispensées par des experts du terrain.</p>
+            <div className="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white text-sm font-semibold mb-6 shadow-lg">Experts en Formations</div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 max-w-3xl drop-shadow-2xl drop-shadow-black/60" style={{ fontFamily: "var(--font-display)" }}>Académie <span className="gradient-text">Innov&apos;Yed</span></h1>
+            <p className="text-lg text-white/90 max-w-2xl mb-8 drop-shadow-lg drop-shadow-black/40">Nous transformons votre ambition technologique en succès concret. Du développement logiciel à l&apos;intelligence artificielle, nous sommes le partenaire de confiance de votre transformation numérique.</p>
           <div className="flex flex-col sm:flex-row gap-4">
             <AuthActionLink href="/devis" className="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan to-violet text-white font-semibold hover:shadow-lg hover:shadow-cyan/25 transition-all active:scale-95 flex items-center gap-2">
               Demander une Formation <ArrowRight className="w-5 h-5" />
