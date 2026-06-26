@@ -62,7 +62,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchServices, setSearchServices] = useState<typeof services>([]);
+  const [searchServices, setSearchServices] = useState<{ slug: string; shortTitle: string; description: string; color: string }[]>([]);
   const [ctaPos, setCtaPos] = useState({ x: 50, y: 50 });
   const ctaRef = useRef<HTMLAnchorElement>(null);
 

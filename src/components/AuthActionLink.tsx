@@ -12,9 +12,10 @@ type Props = {
   children: ReactNode;
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 };
 
-export default function AuthActionLink({ href, children, className, onClick }: Props) {
+export default function AuthActionLink({ href, children, className, onClick, style }: Props) {
   const { token } = useAuth();
   const router = useRouter();
   const [showAuth, setShowAuth] = useState(false);
@@ -45,7 +46,7 @@ export default function AuthActionLink({ href, children, className, onClick }: P
           title="Connectez-vous pour continuer"
         />
       )}
-      <Link href={href} onClick={handleClick} className={className}>
+      <Link href={href} onClick={handleClick} className={className} style={style}>
         {children}
       </Link>
     </>

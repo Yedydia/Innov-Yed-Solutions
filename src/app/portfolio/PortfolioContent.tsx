@@ -167,7 +167,7 @@ export default function PortfolioPage() {
                     <h3 className="text-lg font-bold mb-2 group-hover:text-cyan transition-colors">{project.title}</h3>
                     <p className="text-sm text-[var(--foreground)]/60 mb-4">{project.description}</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {project.technologies.map((tech) => (
+                      {project.technologies.map((tech: string) => (
                         <span key={tech} className="px-2 py-0.5 text-[10px] rounded-full border border-[var(--card-border)] text-[var(--foreground)]/50">{tech}</span>
                       ))}
                     </div>

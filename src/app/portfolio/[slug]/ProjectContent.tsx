@@ -130,11 +130,11 @@ export default function ProjectDetailPage() {
               </div>
               <div className="p-6 rounded-2xl bg-[var(--card-bg)] border border-[var(--card-border)]">
                 <h3 className="font-bold mb-4">Technologies</h3>
-                <div className="flex flex-wrap gap-2">{project.technologies.map((t) => (<span key={t} className="px-3 py-1 text-xs rounded-full bg-cyan/10 text-cyan">{t}</span>))}</div>
+                <div className="flex flex-wrap gap-2">{project.technologies.map((t: string) => (<span key={t} className="px-3 py-1 text-xs rounded-full bg-cyan/10 text-cyan">{t}</span>))}</div>
               </div>
               <div className="p-6 rounded-2xl bg-[var(--card-bg)] border border-[var(--card-border)]">
                 <h3 className="font-bold mb-4">Résultats</h3>
-                <ul className="space-y-2">{project.results.map((r) => (<li key={r} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-green" />{r}</li>))}</ul>
+                <ul className="space-y-2">{project.results.map((r: string) => (<li key={r} className="flex items-center gap-2 text-sm"><CheckCircle className="w-4 h-4 text-green" />{r}</li>))}</ul>
               </div>
             </div>
           </div>

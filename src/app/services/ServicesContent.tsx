@@ -7,8 +7,19 @@ import { ArrowRight, CheckCircle, Code2, Wrench, Shield, Cpu, Brain, Palette, Gr
 
 const iconMap: Record<string, React.ElementType> = { Code2, Wrench, Shield, Cpu, Brain, Palette, GraduationCap, Sigma, Gamepad2, FileText, Headphones, Zap, BatteryCharging };
 
+interface Service {
+  icon: string;
+  slug: string;
+  image: string;
+  title: string;
+  color: string;
+  longDescription: string;
+  subServices: { title: string; desc: string }[];
+  technologies: string[];
+}
+
 export default function ServicesPage() {
-  const [services, setServices] = useState([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 

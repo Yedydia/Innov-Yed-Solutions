@@ -8,11 +8,34 @@ import { useState, useEffect } from "react";
 
 const iconMap: Record<string, React.ElementType> = { Code2, Wrench, Shield, Cpu, Brain, Palette, GraduationCap, Sigma, Gamepad2 };
 
+interface Service {
+  slug: string;
+  icon: string;
+  image: string;
+  heroImage: string;
+  shortTitle: string;
+  title: string;
+  color: string;
+  longDescription: string;
+  subServices: { title: string; desc: string }[];
+  technologies: string[];
+  faqs: { q: string; a: string }[];
+}
+
+interface Project {
+  slug: string;
+  title: string;
+  image: string;
+  client: string;
+  year: string;
+  domain: string;
+}
+
 export default function ServiceDetailPage() {
   const { slug } = useParams();
-  const [services, setServices] = useState([]);
-  const [service, setService] = useState<any>(null);
-  const [relatedProjects, setRelatedProjects] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [service, setService] = useState<Service | null>(null);
+  const [relatedProjects, setRelatedProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -25,9 +48,9 @@ export default function ServiceDetailPage() {
     ])
       .then(([servicesData, projectsData]) => {
         setServices(servicesData);
-        const found = servicesData.find((s: any) => s.slug === slug);
-        setService(found);
-        setRelatedProjects(projectsData.filter((p: any) => p.domain === slug));
+        const found = servicesData.find((s: Service) => s.slug === slug);
+        setService(found || null);
+        setRelatedProjects(projectsData.filter((p: Project) => p.domain === slug));
         setLoading(false);
       })
       .catch(() => {
@@ -115,7 +138,7 @@ export default function ServiceDetailPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h2 className="text-3xl font-bold mb-10" style={{ fontFamily: "var(--font-display)" }}>Nos prestations</h2>
           <div className="grid gap-4">
-            {service.subServices.map((sub, i) => (
+            {service.subServices.map((sub: { title: string; desc: string }, i: number) => (
               <div key={sub.title} className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] overflow-hidden">
                 <button onClick={() => setOpenSub(openSub === i ? null : i)}
                   className="w-full flex items-center justify-between p-6 text-left hover:bg-[var(--card-border)]/20 transition-all">
@@ -129,7 +152,7 @@ export default function ServiceDetailPage() {
                   <div className="px-6 pb-6 pt-0 ml-9">
                     <p className="text-[var(--foreground)]/60 leading-relaxed">{sub.desc}</p>
                     <div className="flex flex-wrap gap-2 mt-4">
-                      {service.technologies.slice(0, 4).map((tech) => (
+                      {service.technologies.slice(0, 4).map((tech: string) => (
                         <span key={tech} className="px-3 py-1 text-xs rounded-full border border-[var(--card-border)] text-[var(--foreground)]/50">{tech}</span>
                       ))}
                     </div>
@@ -149,7 +172,7 @@ export default function ServiceDetailPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <h2 className="text-3xl font-bold mb-10" style={{ fontFamily: "var(--font-display)" }}>Questions Fréquentes</h2>
           <div className="space-y-3">
-            {service.faqs.map((faq, i) => (
+            {service.faqs.map((faq: { q: string; a: string }, i: number) => (
               <div key={i} className="rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] overflow-hidden">
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-center justify-between p-5 text-left">
