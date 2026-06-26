@@ -166,9 +166,11 @@ export default function DevisAdminPage() {
                     </div>
                     {selectedCard === card.id && (
                       <div className="mt-3 pt-3 border-t border-[var(--card-border)] space-y-2">
+                        <div className="text-xs text-gray-300 bg-white/[0.03] rounded-lg p-2.5 whitespace-pre-wrap">{card.description || "Aucune description"}</div>
                         {card.company && <div className="text-xs text-gray-400">Société : {card.company}</div>}
                         <div className="flex items-center gap-2 text-xs text-gray-400"><User className="w-3 h-3" /> {card.email}</div>
                         {card.phone && <div className="flex items-center gap-2 text-xs text-gray-400"><Phone className="w-3 h-3" /> {card.phone}</div>}
+                        <div className="text-xs text-gray-500">Créé le {new Date(card.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {Object.entries(statusLabels).filter(([k]) => k !== card.status).map(([key, label]) => (
                             <button key={key} onClick={(e) => { e.stopPropagation(); handleStatusChange(card.id, key); }} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-400 hover:bg-violet/10 hover:text-violet-light transition-colors">{label}</button>
@@ -210,7 +212,7 @@ export default function DevisAdminPage() {
               </thead>
               <tbody>
                 {devis.map((d) => (
-                  <tr key={d.id} className="border-b border-[var(--card-border)] last:border-0 hover:bg-[var(--card-bg)] transition-colors">
+                  <tr key={d.id} className="border-b border-[var(--card-border)] last:border-0 hover:bg-[var(--card-bg)] transition-colors cursor-pointer" onClick={() => setSelectedCard(selectedCard === d.id ? null : d.id)}>
                     <td className="px-5 py-4"><span className="font-mono text-sm">{d.reference}</span></td>
                     <td className="px-5 py-4">
                       <div className="flex items-center gap-2">
@@ -222,8 +224,25 @@ export default function DevisAdminPage() {
                     <td className="px-5 py-4 font-semibold text-sm text-violet-light">{d.budget ? formatPrice(parseInt(d.budget) || 0) : "—"}</td>
                     <td className="px-5 py-4"><span className={`text-xs px-2 py-0.5 rounded-full ${d.status === "gagne" ? "text-green bg-green/10" : d.status === "perdu" ? "text-red bg-red/10" : d.status === "accepte" ? "text-violet bg-violet/10" : d.status === "refuse" ? "text-red bg-red/10" : "text-cyan bg-cyan/10"}`}>{statusLabels[d.status] || d.status}</span></td>
                     <td className="px-5 py-4 hidden md:table-cell"><span className="text-xs text-gray-400">{new Date(d.createdAt).toLocaleDateString("fr-FR")}</span></td>
-                    <td className="px-5 py-4 text-right"><button onClick={() => setDeleteId(d.id)} className="p-2 rounded-lg hover:bg-red/10" title="Supprimer"><Trash2 className="w-4 h-4 text-gray-400" /></button></td>
+                    <td className="px-5 py-4 text-right"><button onClick={(e) => { e.stopPropagation(); setDeleteId(d.id); }} className="p-2 rounded-lg hover:bg-red/10" title="Supprimer"><Trash2 className="w-4 h-4 text-gray-400" /></button></td>
                   </tr>
+                  {selectedCard === d.id && (
+                    <tr key={d.id + "-detail"} className="bg-white/[0.02]">
+                      <td colSpan={7} className="px-5 py-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                          <div><span className="text-gray-500">Description</span><p className="text-gray-300 mt-1 whitespace-pre-wrap">{d.description || "—"}</p></div>
+                          {d.company && <div><span className="text-gray-500">Société</span><p className="text-gray-300 mt-1">{d.company}</p></div>}
+                          <div><span className="text-gray-500">Téléphone</span><p className="text-gray-300 mt-1">{d.phone || "—"}</p></div>
+                          <div><span className="text-gray-500">Date</span><p className="text-gray-300 mt-1">{new Date(d.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</p></div>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 mt-3">
+                          {Object.entries(statusLabels).filter(([k]) => k !== d.status).map(([key, label]) => (
+                            <button key={key} onClick={(e) => { e.stopPropagation(); handleStatusChange(d.id, key); }} className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 text-gray-400 hover:bg-violet/10 hover:text-violet-light transition-colors">{label}</button>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 ))}
               </tbody>
             </table>
@@ -234,22 +253,26 @@ export default function DevisAdminPage() {
       {layout === "grid" && (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {devis.map((d) => (
-            <div key={d.id} className="glass rounded-2xl p-5 group">
+            <div key={d.id} className="glass rounded-2xl p-5 group cursor-pointer" onClick={() => setSelectedCard(selectedCard === d.id ? null : d.id)}>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-gray-400 font-mono">{d.reference}</span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full ${d.status === "gagne" ? "text-green bg-green/10" : d.status === "perdu" ? "text-red bg-red/10" : d.status === "accepte" ? "text-violet bg-violet/10" : d.status === "refuse" ? "text-red bg-red/10" : "text-cyan bg-cyan/10"}`}>{statusLabels[d.status]}</span>
               </div>
               <h3 className="font-semibold text-sm mb-1">{d.name}</h3>
               <p className="text-xs text-gray-400 mb-2">{d.service}</p>
+              {selectedCard === d.id && (
+                <div className="text-xs text-gray-300 bg-white/[0.03] rounded-lg p-2.5 mb-2 whitespace-pre-wrap">{d.description || "Aucune description"}</div>
+              )}
               {d.company && <p className="text-xs text-gray-400 mb-2">Société : {d.company}</p>}
               <div className="flex items-center gap-2 text-xs text-gray-400 mb-3"><User className="w-3 h-3" /> {d.email}</div>
+              {selectedCard === d.id && d.phone && <div className="flex items-center gap-2 text-xs text-gray-400 mb-3"><Phone className="w-3 h-3" /> {d.phone}</div>}
               <div className="flex items-center justify-between pt-3 border-t border-[var(--card-border)]">
                 <span className="font-bold text-sm text-violet-light">{d.budget ? formatPrice(parseInt(d.budget) || 0) : "—"}</span>
                 <div className="flex gap-1">
                   {Object.entries(statusLabels).filter(([k]) => k !== d.status).slice(0, 2).map(([key, label]) => (
-                    <button key={key} onClick={() => handleStatusChange(d.id, key)} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-400 hover:bg-violet/10 hover:text-violet-light transition-colors">{label}</button>
+                    <button key={key} onClick={(e) => { e.stopPropagation(); handleStatusChange(d.id, key); }} className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-400 hover:bg-violet/10 hover:text-violet-light transition-colors">{label}</button>
                   ))}
-                  <button onClick={() => setDeleteId(d.id)} className="p-1 rounded-lg hover:bg-red/10 transition-colors"><Trash2 className="w-3 h-3 text-gray-400" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); setDeleteId(d.id); }} className="p-1 rounded-lg hover:bg-red/10 transition-colors"><Trash2 className="w-3 h-3 text-gray-400" /></button>
                 </div>
               </div>
             </div>
