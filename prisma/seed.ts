@@ -1,0 +1,362 @@
+import "dotenv/config";
+import { PrismaClient } from "../src/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import bcrypt from "bcryptjs";
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+const prisma = new PrismaClient({ adapter });
+
+async function main() {
+  console.log("Seeding database...");
+
+  await prisma.ticketMessage.deleteMany();
+  await prisma.ticket.deleteMany();
+  await prisma.invoice.deleteMany();
+  await prisma.orderItem.deleteMany();
+  await prisma.order.deleteMany();
+  await prisma.devis.deleteMany();
+  await prisma.contact.deleteMany();
+  await prisma.newsletter.deleteMany();
+  await prisma.testimonial.deleteMany();
+  await prisma.teamMember.deleteMany();
+  await prisma.project.deleteMany();
+  await prisma.course.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.blogArticle.deleteMany();
+  await prisma.service.deleteMany();
+  await prisma.role.deleteMany();
+  await prisma.user.deleteMany();
+
+  const defaultRoles = [
+    { name: "admin", label: "Administrateur", description: "Accès complet à l'administration", color: "#EF4444", isDefault: false },
+    { name: "developpeur", label: "Développeur", description: "Développement web, mobile et logiciel", color: "#06B6D4", isDefault: false },
+    { name: "designer", label: "Designer", description: "Design graphique et UI/UX", color: "#F59E0B", isDefault: false },
+    { name: "client", label: "Client", description: "Utilisateur standard", color: "#9CA3AF", isDefault: true },
+    { name: "chef-projet", label: "Chef de Projet", description: "Gestion et coordination des projets", color: "#8B5CF6", isDefault: false },
+    { name: "commercial", label: "Commercial", description: "Équipe commerciale et vente", color: "#10B981", isDefault: false },
+    { name: "marketing", label: "Marketing", description: "Marketing et communication", color: "#EC4899", isDefault: false },
+    { name: "rh", label: "Ressources Humaines", description: "Gestion des ressources humaines", color: "#F97316", isDefault: false },
+    { name: "comptable", label: "Comptable", description: "Comptabilité et finances", color: "#14B8A6", isDefault: false },
+    { name: "technicien", label: "Technicien", description: "Support technique et maintenance", color: "#3B82F6", isDefault: false },
+  ];
+
+  for (const role of defaultRoles) {
+    await prisma.role.create({ data: role });
+  }
+  console.log(`${defaultRoles.length} roles seeded.`);
+
+  const adminPassword = await bcrypt.hash("Admin123!", 10);
+  await prisma.user.create({
+    data: { name: "Yédydia KPLOYA", email: "contact@innovyed.com", password: adminPassword, role: "admin" },
+  });
+  console.log("Admin user created: contact@innovyed.com / Admin123!");
+
+  const services = [
+    { slug: "service-bureau", title: "Service de Bureau", shortTitle: "Bureau", icon: "FileText", description: "Réalisation d'exposés, saisies, reliure de documents, photocopies et tirages professionnels.", longDescription: "Notre service de bureau prend en charge tous vos besoins documentaires : de la réalisation d'exposés soignés à la reliure professionnelle, en passant par les photocopies et tirages couleur haute qualité.", image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1568667256549-094345857637?w=1600&q=100", color: "#4F46E5", subServices: [{ title: "Exposés & Saisies", desc: "Réalisation d'exposés professionnels, saisie de texte, mise en page soignée" }, { title: "Reliure de Documents", desc: "Reliure thermique, spirale, dos carré collé — finition professionnelle" }, { title: "Photocopies & Tirages", desc: "Photocopies noir & blanc ou couleur, tirages haute qualité, tous formats" }, { title: "Plastification", desc: "Plastification de documents A4 à A3, protection longue durée" }], technologies: ["Microsoft Office", "Adobe Acrobat", "Canon", "HP", "Epson"], faqs: [{ q: "Quels formats de reliure proposez-vous ?", a: "Nous proposons la reliure thermique, spirale plastique/métallique et dos carré collé pour un rendu professionnel." }, { q: "Faites-vous des impressions grand format ?", a: "Oui, nous imprimons jusqu'au format A0 pour les plans, affiches et bâches." }], orderIndex: 1 },
+    { slug: "support-technique", title: "Support Technique", shortTitle: "Support Technique", icon: "Headphones", description: "Installation de systèmes d'exploitation, Microsoft Office, antivirus authentiques et assistance complète.", longDescription: "Notre équipe de support technique installe et configure vos systèmes d'exploitation, suites bureautiques et solutions de sécurité. Nous garantissons des logiciels authentiques et parfaitement configurés.", image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1600&q=100", color: "#10B981", subServices: [{ title: "Installation OS", desc: "Windows, Linux, macOS — installation propre et configuration optimisée" }, { title: "Microsoft Office", desc: "Installation et activation de Microsoft Office authentique (Word, Excel, PowerPoint, etc.)" }, { title: "Antivirus Authentiques", desc: "Installation et activation d'antivirus licenciés : Kaspersky, Bitdefender, Norton" }, { title: "Assistance à Distance", desc: "Helpdesk niveau 1-3, prise en main à distance via TeamViewer" }], technologies: ["Windows", "Linux", "macOS", "Microsoft 365", "Kaspersky", "TeamViewer"], faqs: [{ q: "Intervenez-vous sur site ou à distance ?", a: "Les deux ! Nous intervenons à distance pour les problèmes logiciels et sur site pour le matériel, dans tout Cotonou." }, { q: "Les logiciels installés sont-ils authentiques ?", a: "Absolument. Nous installons uniquement des logiciels licenciés et authentiques avec garantie." }], orderIndex: 2 },
+    { slug: "reseaux-securite", title: "Réseaux et Sécurité", shortTitle: "Réseaux & Sécurité", icon: "Shield", description: "Installation, administration et sécurité des réseaux informatiques, protection de vos données.", longDescription: "Nous concevons, installons et sécurisons vos réseaux informatiques. De l'infrastructure réseau à la protection des données, nous offrons des solutions personnalisées pour sécuriser votre activité.", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1600&q=100", color: "#EF4444", subServices: [{ title: "Installation Réseaux", desc: "Câblage structuré, configuration routeurs, switches, points d'accès WiFi" }, { title: "Administration Réseaux", desc: "Gestion VLANs, VPNs, firewall, monitoring réseau 24/7" }, { title: "Sécurité des Données", desc: "Solutions personnalisées pour la sécurité et la sauvegarde de vos données" }, { title: "Audits & Conformité", desc: "Audit de sécurité, détection de vulnérabilités, mise en conformité" }], technologies: ["Cisco", "Fortinet", "MikroTik", "Ubiquiti", "pfSense", "Wireshark"], faqs: [{ q: "Comment évaluez-vous le niveau de sécurité de mon réseau ?", a: "Nous réalisons un audit complet incluant scan de vulnérabilités, test de pénétration et analyse de la configuration." }, { q: "Installez-vous des réseaux pour les entreprises ?", a: "Oui, nous concevons et installons des réseaux complets pour PME et grandes entreprises." }], orderIndex: 3 },
+    { slug: "optimisation-recuperation", title: "Optimisation et Récupération", shortTitle: "Optimisation", icon: "Zap", description: "Optimisation des performances PC/portables et récupération de données après formatage ou suppression.", longDescription: "Nous redonnons vie à vos équipements lents et récupérons vos données perdues. Optimisation matérielle et logicielle pour des performances maximales, récupération sur clés USB, disques durs et cartes mémoire.", image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1600&q=100", color: "#F59E0B", subServices: [{ title: "Optimisation PC Bureau", desc: "Nettoyage, défragmentation, upgrade RAM/SSD, optimisation démarrage" }, { title: "Optimisation Portables", desc: "Diagnostic performances, remplacement composants, optimisation batterie" }, { title: "Récupération de Données", desc: "Récupération après formatage ou suppression accidentelle (USB, disque dur, carte SD)" }, { title: "Diagnostic Complet", desc: "Audit matériel et logiciel, rapport détaillé avec recommandations" }], technologies: ["CCleaner", "CrystalDisk", "Recuva", "EaseUS", "MemTest86", "HWMonitor"], faqs: [{ q: "Peut-on vraiment récupérer des données après un formatage ?", a: "Dans la majorité des cas oui ! Nous utilisons des outils professionnels pour récupérer vos fichiers supprimés ou formatés." }, { q: "Combien coûte une optimisation complète ?", a: "Une optimisation standard coûte entre 15 000 et 35 000 FCFA selon l'état du matériel." }], orderIndex: 4 },
+    { slug: "maintenance-reparation", title: "Maintenance et Réparation", shortTitle: "Maintenance", icon: "Wrench", description: "Maintenance préventive et curative pour ordinateurs, réparation de matériel informatique et électronique.", longDescription: "Notre service de maintenance assure la pérennité de votre parc informatique. Maintenance préventive régulière et réparation rapide de tout matériel informatique et électronique.", image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=1600&q=100", color: "#4F46E5", subServices: [{ title: "Maintenance Préventive", desc: "Nettoyage interne, dépoussiérage, changement pâte thermique, vérifications" }, { title: "Maintenance Curative", desc: "Diagnostic pannes, remplacement composants, réparation cartes mères" }, { title: "Réparation Électronique", desc: "Réparation de cartes électroniques, soudures, remplacement de composants CMS" }, { title: "Contrats de Maintenance", desc: "Forfaits mensuels pour entreprises avec interventions illimitées" }], technologies: ["Station de soudure", "Multimètre", "Oscilloscope", "Alimentation stabilisée"], faqs: [{ q: "Quels sont vos délais d'intervention ?", a: "Intervention sous 4h pour les urgences critiques, sous 24h pour les demandes standard." }, { q: "Proposez-vous des contrats de maintenance pour entreprises ?", a: "Oui, nous proposons des forfaits mensuels adaptés à la taille de votre parc informatique." }], orderIndex: 5 },
+    { slug: "energie-accessoires", title: "Énergie et Accessoires", shortTitle: "Énergie", icon: "BatteryCharging", description: "Installation d'antennes paraboliques et panneaux solaires, vente et conseil en équipements informatiques.", longDescription: "Nous installons des solutions énergétiques durables (panneaux solaires) et des antennes paraboliques. Notre boutique propose également une sélection d'équipements informatiques avec conseil personnalisé.", image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1600&q=100", color: "#10B981", subServices: [{ title: "Panneaux Solaires", desc: "Installation complète : panneaux, onduleurs, batteries, monitoring" }, { title: "Antennes Paraboliques", desc: "Installation et configuration d'antennes paraboliques, tous opérateurs" }, { title: "Vente Équipements", desc: "PC, portables, périphériques, accessoires — conseil et vente" }, { title: "Conseil en Achat", desc: "Accompagnement personnalisé pour choisir le bon équipement selon vos besoins" }], technologies: ["SolarEdge", "Victron", "Strong", "Starsat", "HP", "Lenovo"], faqs: [{ q: "Quel budget pour une installation solaire ?", a: "Le budget dépend de la puissance souhaitée. Comptez entre 300 000 et 2 000 000 FCFA pour une installation résidentielle." }, { q: "Vendez-vous des ordinateurs neufs ?", a: "Oui, nous proposons une sélection de PC et portables neufs avec garantie et conseil personnalisé." }], orderIndex: 6 },
+    { slug: "creation-web-graphisme", title: "Création Web et Graphisme", shortTitle: "Web & Design", icon: "Palette", description: "Conception de sites web statiques ou dynamiques, création de matériel publicitaire professionnel.", longDescription: "Notre studio créatif conçoit des sites web performants et du matériel publicitaire percutant. Du site vitrine à la plateforme complexe, du logo à la bâche grand format — nous donnons vie à votre vision.", image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1600&q=100", color: "#14B8A6", subServices: [{ title: "Sites Web", desc: "Sites vitrines, dynamiques, e-commerce — design moderne et responsive" }, { title: "Applications Web", desc: "Plateformes SaaS, tableaux de bord, applications métier sur mesure" }, { title: "Matériel Publicitaire", desc: "Affiches, bâches, flyers, logos, cartes de visite, branding complet" }, { title: "Identité Visuelle", desc: "Création de logo, charte graphique, branding cohérent et professionnel" }], technologies: ["Next.js", "React", "Figma", "Photoshop", "Illustrator", "Tailwind CSS"], faqs: [{ q: "Combien coûte un site web professionnel ?", a: "Un site vitrine commence à partir de 300 000 FCFA, un site dynamique à partir de 800 000 FCFA." }, { q: "Quel est le délai pour une identité visuelle complète ?", a: "Environ 2-3 semaines pour un package complet logo + charte graphique + déclinaisons." }], orderIndex: 7 },
+    { slug: "formations-mises-a-jour", title: "Formations et Mises à Jour", shortTitle: "Formations", icon: "GraduationCap", description: "Formations en informatique, développement web, graphisme et mises à jour de systèmes.", longDescription: "Nous proposons des formations certifiantes en informatique, développement web et graphisme. Nos formateurs experts vous accompagnent également dans les mises à jour de vos systèmes pour ordinateurs et appareils mobiles.", image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1600&q=100", color: "#F59E0B", subServices: [{ title: "Formation Informatique", desc: "Bureautique, programmation, cybersécurité — formations certifiantes" }, { title: "Formation Web & Design", desc: "Développement web, graphisme, UI/UX — cursus complets" }, { title: "Mises à Jour PC", desc: "Mise à jour OS, pilotes, firmware, BIOS pour ordinateurs" }, { title: "Mises à Jour Mobiles", desc: "Mise à jour systèmes Android/iOS, firmware appareils mobiles" }], technologies: ["Microsoft 365", "Adobe Suite", "VS Code", "Moodle", "Zoom"], faqs: [{ q: "Vos formations sont-elles certifiantes ?", a: "Oui, nous délivrons des certificats reconnus à la fin de chaque formation avec QR code de vérification." }, { q: "Proposez-vous des formations en ligne ?", a: "Oui, toutes nos formations sont disponibles en présentiel et en ligne via notre académie." }], orderIndex: 8 },
+    { slug: "gaming-logiciels-multimedia", title: "Gaming, Logiciels & Multimédia", shortTitle: "Gaming & Multimédia", icon: "Gamepad2", description: "Vente de jeux, installation de logiciels spécialisés, films et séries disponibles sur demande.", longDescription: "Votre destination gaming et divertissement : vente de jeux PC/console, installation de logiciels spécialisés (électrotechnique, architecture, comptabilité) et catalogue de films & séries sur demande.", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1600&q=100", color: "#EF4444", subServices: [{ title: "Vente de Jeux", desc: "Jeux PC, console, mobiles — catalogue varié et dernières sorties" }, { title: "Logiciels Spécialisés", desc: "Installation de logiciels professionnels : AutoCAD, EPLAN, Sage, etc." }, { title: "Films & Séries", desc: "Catalogue de films et séries disponibles sur demande, tous genres" }, { title: "Configuration Gaming", desc: "Montage PC gaming sur mesure, optimisation performances jeux" }], technologies: ["Steam", "AutoCAD", "EPLAN", "Sage", "VLC", "OBS"], faqs: [{ q: "Installez-vous des logiciels professionnels spécifiques ?", a: "Oui, nous installons des logiciels spécialisés : électrotechnique, architecture, comptabilité, CAO/DAO et bien plus." }, { q: "Comment accéder au catalogue films & séries ?", a: "Contactez-nous par WhatsApp ou passez en boutique pour consulter notre catalogue et commander." }], orderIndex: 9 },
+    { slug: "systemes-automatises", title: "Systèmes Automatisés", shortTitle: "Automatisation", icon: "Cpu", description: "Conception et installation de systèmes automatisés : domotique, électronique, IoT et solutions intelligentes.", longDescription: "Nous concevons et installons des systèmes automatisés sur mesure. De la domotique résidentielle aux projets IoT industriels, nos solutions allient innovation technologique et fiabilité.", image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=100", heroImage: "https://images.unsplash.com/photo-1558002038-1055907df827?w=1600&q=100", color: "#14B8A6", subServices: [{ title: "Domotique", desc: "Maisons intelligentes : éclairage, climatisation, sécurité, volets automatisés" }, { title: "Systèmes Embarqués", desc: "Conception PCB, programmation Arduino/ESP32/Raspberry Pi, IoT" }, { title: "Automatisation Industrielle", desc: "Solutions d'automatisation pour PME et industries locales" }, { title: "Surveillance Intelligente", desc: "Caméras IP, détecteurs, alarmes connectées, monitoring à distance" }], technologies: ["Arduino", "ESP32", "Raspberry Pi", "MQTT", "Home Assistant", "Node-RED"], faqs: [{ q: "Quel budget pour une installation domotique complète ?", a: "Le budget dépend de la taille de l'habitation. Comptez entre 500 000 et 3 000 000 FCFA pour une installation complète." }, { q: "Peut-on automatiser une maison existante ?", a: "Absolument ! Nos solutions sans fil s'adaptent aux constructions existantes sans travaux majeurs." }], orderIndex: 10 },
+  ];
+
+  for (const s of services) {
+    await prisma.service.create({
+      data: { ...s, subServices: s.subServices, faqs: s.faqs },
+    });
+  }
+  console.log(`${services.length} services seeded.`);
+
+  const blogArticles = [
+    { slug: "next-js-14-guide-complet", title: "Next.js 14 : Le Guide Complet pour 2025", category: "Développement", author: "David HOUNSOU", date: new Date("2025-05-15"), readTime: 12, image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=100", excerpt: "Découvrez toutes les nouveautés de Next.js 14 : App Router, Server Components, Server Actions et bien plus.", content: "Next.js 14 représente une évolution majeure dans l'écosystème React...", featured: true },
+    { slug: "cybersecurite-pme-africaines", title: "Cybersécurité pour les PME Africaines : Guide Pratique", category: "Sécurité", author: "Patrick ADJOVI", date: new Date("2025-05-10"), readTime: 8, image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=100", excerpt: "Les PME africaines sont de plus en plus ciblées par les cybercriminels. Voici comment vous protéger efficacement.", content: "La cybersécurité n'est plus un luxe réservé aux grandes entreprises...", featured: false },
+    { slug: "ia-transforme-afrique", title: "Comment l'IA Transforme l'Économie Africaine", category: "Intelligence Artificielle", author: "Grâce AHOUANNOU", date: new Date("2025-05-08"), readTime: 10, image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=100", excerpt: "De l'agriculture de précision à la fintech, l'intelligence artificielle révolutionne tous les secteurs en Afrique.", content: "L'Afrique est en train de devenir un terrain d'innovation majeur pour l'IA...", featured: false },
+    { slug: "domotique-maison-connectee", title: "Domotique : Construire une Maison Connectée au Bénin", category: "Électronique", author: "Yédydia KPLOYA", date: new Date("2025-05-01"), readTime: 7, image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=100", excerpt: "Guide complet pour automatiser votre maison au Bénin : équipements, budget, installation.", content: "La domotique est désormais accessible au Bénin...", featured: false },
+    { slug: "mobile-money-integration", title: "Intégrer Mobile Money dans votre Application", category: "Développement", author: "Sarah KIKI", date: new Date("2025-04-28"), readTime: 15, image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=800&q=100", excerpt: "Tutoriel technique pour intégrer MTN Mobile Money et Moov Money via CinetPay dans votre application.", content: "Le paiement mobile est roi en Afrique de l'Ouest...", featured: true },
+    { slug: "react-vs-vue-2025", title: "React vs Vue vs Angular en 2025 : Lequel Choisir ?", category: "Développement", author: "David HOUNSOU", date: new Date("2025-04-20"), readTime: 11, image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=100", excerpt: "Comparaison objective des trois frameworks frontend les plus populaires pour votre prochain projet.", content: "Le choix d'un framework frontend est une décision stratégique...", featured: false },
+    { slug: "panneaux-solaires-benin-guide", title: "Panneaux Solaires au Bénin : Guide Complet d'Installation", category: "Énergie", author: "Yédydia KPLOYA", date: new Date("2025-04-12"), readTime: 9, image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=100", excerpt: "Tout ce qu'il faut savoir pour installer des panneaux solaires au Bénin : coûts, dimensionnement, entretien et rentabilité.", content: "L'énergie solaire est une solution incontournable au Bénin...", featured: false },
+    { slug: "maintenance-pc-astuces", title: "10 Astuces pour Prolonger la Durée de Vie de votre PC", category: "Maintenance", author: "Sarah KIKI", date: new Date("2025-04-05"), readTime: 6, image: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=100", excerpt: "Des conseils pratiques simples pour garder votre ordinateur performant plus longtemps et éviter les pannes coûteuses.", content: "Un ordinateur bien entretenu peut durer des années...", featured: false },
+  ];
+
+  for (const a of blogArticles) {
+    await prisma.blogArticle.create({ data: a });
+  }
+  console.log(`${blogArticles.length} blog articles seeded.`);
+
+  const products = [
+    { slug: "licence-antivirus-pro", name: "Licence Antivirus Pro — 1 an", category: "Licences", price: 25000, originalPrice: 35000, image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=100", rating: 4.5, reviews: 89, stock: 150, description: "Protection complète contre les menaces : virus, ransomware, phishing. 3 appareils inclus." },
+    { slug: "ssd-512go-nvme", name: "SSD NVMe 512Go — Haute Performance", category: "Matériel", price: 45000, originalPrice: 55000, image: "https://images.unsplash.com/photo-1709660850064-0ec82e1a6b5d?w=800&q=100", rating: 4.7, reviews: 124, stock: 30, description: "SSD NVMe PCIe Gen4, vitesse de lecture jusqu'à 7000 Mo/s. Upgrade idéal pour PC portable et desktop." },
+    { slug: "pack-microsoft-365", name: "Pack Microsoft 365 Business", category: "Licences", price: 55000, originalPrice: 70000, image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=100", rating: 4.8, reviews: 203, stock: 999, description: "Suite complète : Word, Excel, PowerPoint, Teams, OneDrive 1To. Licence annuelle pour 5 postes." },
+    { slug: "raspberry-pi-5", name: "Raspberry Pi 5 — 8Go RAM", category: "Matériel", price: 65000, originalPrice: 75000, image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&q=100", rating: 4.6, reviews: 67, stock: 15, description: "Le nouveau Raspberry Pi 5 avec processeur quad-core 2.4GHz et 8Go de RAM. Idéal pour projets IoT." },
+    { slug: "formation-devops-complete", name: "Formation DevOps Complète (en ligne)", category: "Formations", price: 180000, originalPrice: 250000, image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=100", rating: 4.9, reviews: 56, stock: 999, description: "60h de formation : Docker, Kubernetes, CI/CD, Terraform, monitoring. Certificat inclus." },
+    { slug: "ecran-27-4k", name: 'Écran 27" 4K IPS — Professionnel', category: "Matériel", price: 280000, originalPrice: 320000, image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&q=100", rating: 4.7, reviews: 34, stock: 8, description: "Écran professionnel 27 pouces 4K UHD, dalle IPS, 100% sRGB. USB-C avec charge 65W." },
+    { slug: "clavier-mecanique-rgb", name: "Clavier Mécanique RGB — Gaming Pro", category: "Accessoires", price: 35000, originalPrice: 45000, image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=800&q=100", rating: 4.6, reviews: 78, stock: 25, description: "Clavier mécanique switches bleus, rétroéclairage RGB personnalisable, touches anti-ghosting." },
+    { slug: "souris-gaming-sans-fil", name: "Souris Gaming Sans Fil — 16000 DPI", category: "Accessoires", price: 28000, originalPrice: 38000, image: "https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=100", rating: 4.8, reviews: 112, stock: 40, description: "Souris gaming ergonomique, capteur optique 16000 DPI, 7 boutons programmables, autonomie 60h." },
+    { slug: "disque-dur-externe-2to", name: "Disque Dur Externe 2To — USB 3.0", category: "Stockage", price: 38000, originalPrice: 48000, image: "https://images.unsplash.com/photo-1756836857559-4c8161fe07f3?w=800&q=100", rating: 4.5, reviews: 95, stock: 30, description: "Disque dur portable 2To, USB 3.0 haute vitesse, compatible Windows/Mac. Sauvegardez toutes vos données." },
+    { slug: "casque-audio-bluetooth", name: "Casque Audio Bluetooth — Réduction de Bruit", category: "Accessoires", price: 42000, originalPrice: 55000, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=100", rating: 4.7, reviews: 68, stock: 18, description: "Casque circum-aural Bluetooth 5.3, réduction de bruit active, autonomie 40h, son Hi-Fi." },
+    { slug: "webcam-4k-hdr", name: "Webcam 4K HDR — Streaming Pro", category: "Accessoires", price: 55000, originalPrice: 70000, image: "https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=800&q=100", rating: 4.6, reviews: 42, stock: 12, description: "Webcam 4K Ultra HD, HDR, autofocus, microphone intégré, idéale streaming et visioconférence." },
+    { slug: "imprimante-laser-couleur", name: "Imprimante Laser Couleur — WiFi", category: "Matériel", price: 185000, originalPrice: 220000, image: "https://images.unsplash.com/photo-1706212714593-c071d6d95ebf?w=800&q=100", rating: 4.5, reviews: 31, stock: 7, description: "Imprimante laser couleur WiFi, recto-verso automatique, 30 pages/min, idéale bureau." },
+    { slug: "routeur-wifi-6", name: "Routeur WiFi 6 — Double Bande 3000Mbps", category: "Réseau", price: 65000, originalPrice: 85000, image: "https://images.unsplash.com/photo-1606904825846-647eb07f5be2?w=800&q=100", rating: 4.8, reviews: 87, stock: 20, description: "Routeur WiFi 6 AX3000, double bande, MU-MIMO, couverture 200m², contrôle parental." },
+    { slug: "switch-reseau-24-ports", name: "Switch Réseau 24 Ports — Gigabit Manageable", category: "Réseau", price: 120000, originalPrice: 150000, image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=100", rating: 4.6, reviews: 28, stock: 10, description: "Switch manageable 24 ports Gigabit, VLAN, QoS, port console, montage rack 19 pouces." },
+    { slug: "ups-onduleur-1500va", name: "Onduleur UPS 1500VA — Protection Électrique", category: "Énergie", price: 95000, originalPrice: 120000, image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=100", rating: 4.7, reviews: 56, stock: 15, description: "Onduleur 1500VA/900W, 6 prises, protection surtension, autonomie 15min, écran LCD." },
+    { slug: "panneau-solaire-300w", name: "Panneau Solaire 300W — Monocristallin", category: "Énergie", price: 150000, originalPrice: 180000, image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=100", rating: 4.8, reviews: 44, stock: 20, description: "Panneau solaire monocristallin 300W, rendement 21%, garantie 25 ans, idéal résidentiel." },
+    { slug: "logiciel-antivirus-kaspersky", name: "Kaspersky Total Security — 3 Appareils 1 An", category: "Licences", price: 22000, originalPrice: 30000, image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=100", rating: 4.8, reviews: 156, stock: 999, description: "Protection complète : antivirus, firewall, contrôle parental, VPN, gestionnaire de mots de passe." },
+    { slug: "tablette-graphique", name: "Tablette Graphique — 8192 Niveaux de Pression", category: "Accessoires", price: 48000, originalPrice: 60000, image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=100", rating: 4.7, reviews: 63, stock: 14, description: "Tablette graphique 10x6 pouces, 8192 niveaux de pression, compatible Photoshop/Illustrator, stylet inclus." },
+    { slug: "microphone-usb-studio", name: "Microphone USB Studio — Condensateur", category: "Accessoires", price: 38000, originalPrice: 50000, image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&q=100", rating: 4.6, reviews: 71, stock: 16, description: "Microphone condensateur USB, directivité cardioïde, 192kHz/24bit, idéal podcast et streaming." },
+    { slug: "cable-ethernet-cat6-lot", name: "Lot 5 Câbles Ethernet Cat6 — 3m", category: "Réseau", price: 12000, originalPrice: 18000, image: "https://images.unsplash.com/photo-1578016980868-197203ff4b02?w=800&q=100", rating: 4.5, reviews: 88, stock: 200, description: "Lot de 5 câbles Ethernet Cat6 blindés, 3 mètres, débit Gigabit 1Gbps, connecteurs RJ45 plaqués or." },
+    { slug: "laptop-business-15", name: 'Laptop Business 15" — Core i7 / 16Go RAM', category: "Matériel", price: 450000, originalPrice: 550000, image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=100", rating: 4.8, reviews: 29, stock: 5, description: "Ordinateur portable professionnel 15.6 FHD, Intel Core i7 13e Gen, 16Go DDR4, SSD 512Go, Windows 11 Pro." },
+  ];
+
+  for (const p of products) {
+    await prisma.product.create({ data: p });
+  }
+  console.log(`${products.length} products seeded.`);
+
+  const courses = [
+    { slug: "javascript-debutant", title: "JavaScript de Zéro à Héros", instructor: "David HOUNSOU", level: "Débutant", duration: "40h", modules: 12, price: 75000, rating: 4.8, students: 342, image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=100", domain: "Développement", badge: "Bestseller", description: "Maîtrisez JavaScript de A à Z : des bases aux concepts avancés, en passant par l'asynchrone et les APIs." },
+    { slug: "cybersecurite-essentielle", title: "Cybersécurité Essentielle", instructor: "Patrick ADJOVI", level: "Intermédiaire", duration: "30h", modules: 10, price: 95000, rating: 4.9, students: 189, image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=100", domain: "Sécurité", badge: "Nouveau", description: "Apprenez les fondamentaux de la cybersécurité : réseau, cryptographie, pentesting et défense." },
+    { slug: "python-data-science", title: "Python pour la Data Science", instructor: "Grâce AHOUANNOU", level: "Intermédiaire", duration: "50h", modules: 15, price: 120000, rating: 4.7, students: 256, image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=100", domain: "Data & IA", badge: "Mis à jour", description: "De pandas à TensorFlow : devenez data scientist avec Python. Projets pratiques inclus." },
+    { slug: "react-next-maitrise", title: "React & Next.js : Maîtrise Complète", instructor: "David HOUNSOU", level: "Avancé", duration: "60h", modules: 18, price: 150000, rating: 4.9, students: 412, image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=100", domain: "Développement", badge: "Bestseller", description: "Construisez des applications web professionnelles avec React 19 et Next.js 14. SSR, SSG, API routes." },
+    { slug: "reseau-certification", title: "Administration Réseau - Préparation CCNA", instructor: "Patrick ADJOVI", level: "Intermédiaire", duration: "45h", modules: 14, price: 110000, rating: 4.6, students: 178, image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=100", domain: "Réseaux", badge: "", description: "Préparez la certification Cisco CCNA : routage, switching, sécurité réseau de A à Z." },
+    { slug: "figma-ui-ux", title: "UI/UX Design avec Figma", instructor: "Amina DOSSOU", level: "Débutant", duration: "25h", modules: 8, price: 65000, rating: 4.8, students: 290, image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=100", domain: "Design", badge: "Nouveau", description: "Créez des interfaces utilisateur professionnelles avec Figma. Design system, prototypage, collaboration." },
+    { slug: "bureautique-microsoft-365", title: "Maîtriser Microsoft 365 — Bureautique Pro", instructor: "Amina DOSSOU", level: "Débutant", duration: "20h", modules: 8, price: 55000, rating: 4.7, students: 410, image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&q=100", domain: "Bureautique", badge: "Populaire", description: "Word, Excel avancé, PowerPoint, Outlook — maîtrisez toute la suite Microsoft pour être productif au bureau." },
+    { slug: "reparation-electronique", title: "Réparation Électronique Avancée", instructor: "Yédydia KPLOYA", level: "Intermédiaire", duration: "35h", modules: 12, price: 95000, rating: 4.6, students: 145, image: "https://images.unsplash.com/photo-1574169208507-84376144848b?w=800&q=100", domain: "Électronique", badge: "", description: "Apprenez à réparer cartes mères, smartphones, PC portables : soudure CMS, diagnostic, remplacement composants." },
+    { slug: "panneaux-solaires-installation", title: "Installation Panneaux Solaires — De Zéro à Pro", instructor: "Yédydia KPLOYA", level: "Intermédiaire", duration: "28h", modules: 10, price: 110000, rating: 4.8, students: 167, image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&q=100", domain: "Énergie", badge: "Nouveau", description: "Dimensionnement, câblage, onduleurs, batteries — maîtrisez l'installation solaire complète pour résidentiel et commercial." },
+    { slug: "montage-video-premiere", title: "Montage Vidéo avec Premiere Pro & DaVinci", instructor: "Amina DOSSOU", level: "Débutant", duration: "30h", modules: 11, price: 85000, rating: 4.7, students: 203, image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=100", domain: "Multimédia", badge: "", description: "Du tournage à l'export : montage, étalonnage, effets spéciaux, motion design pour vidéos professionnelles." },
+    { slug: "cybersecurite-ethical-hacking", title: "Cybersécurité & Ethical Hacking", instructor: "Patrick ADJOVI", level: "Avancé", duration: "55h", modules: 16, price: 160000, rating: 4.9, students: 132, image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&q=100", domain: "Sécurité", badge: "Bestseller", description: "Pentesting, analyse de vulnérabilités, Kali Linux, Burp Suite — devenez expert en cybersécurité offensive." },
+    { slug: "domotique-iot-pratique", title: "Domotique & IoT : Projets Pratiques", instructor: "Sarah KIKI", level: "Intermédiaire", duration: "25h", modules: 9, price: 75000, rating: 4.6, students: 118, image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=100", domain: "Électronique", badge: "Nouveau", description: "Arduino, ESP32, Home Assistant — créez des systèmes domotiques : éclairage automatique, capteurs, contrôle vocal." },
+  ];
+
+  for (const c of courses) {
+    await prisma.course.create({ data: c });
+  }
+  console.log(`${courses.length} courses seeded.`);
+
+  const projects = [
+    { slug: "fintech-app", title: "Application FinTech Mobile", client: "PayExpress", year: 2025, domain: "developpement", image: "https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&q=100", description: "Application mobile de paiement et transfert d'argent pour l'Afrique de l'Ouest.", technologies: ["React Native", "Node.js", "PostgreSQL"], results: ["50 000+ téléchargements", "99.9% uptime", "Transaction < 2s"] },
+    { slug: "smart-home", title: "Maison Intelligente Cotonou", client: "Résidence Les Palmiers", year: 2024, domain: "systemes-automatises", image: "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=100", description: "Automatisation complète d'une résidence de luxe : éclairage, climatisation, sécurité.", technologies: ["Home Assistant", "ESP32", "Zigbee"], results: ["40% économie énergie", "Sécurité 24/7", "Contrôle vocal"] },
+    { slug: "e-commerce-platform", title: "Plateforme E-Commerce Mode", client: "AfrikFashion", year: 2025, domain: "developpement", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=100", description: "Marketplace mode africaine avec paiement mobile money intégré.", technologies: ["Next.js", "Stripe", "CinetPay"], results: ["200+ vendeurs", "10 000 commandes/mois", "Conversion +35%"] },
+    { slug: "ai-chatbot-bank", title: "Chatbot IA Bancaire", client: "BankOfAfrica", year: 2024, domain: "data-ia", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=100", description: "Assistant virtuel intelligent pour le support client bancaire 24/7.", technologies: ["Python", "OpenAI", "Langchain"], results: ["-60% tickets support", "Satisfaction 92%", "Réponse < 5s"] },
+    { slug: "cyber-audit", title: "Audit Sécurité Gouvernemental", client: "Ministère Numérique", year: 2024, domain: "reseaux-securite", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=100", description: "Audit complet de sécurité informatique pour infrastructure gouvernementale.", technologies: ["Kali Linux", "Nessus", "Burp Suite"], results: ["47 vulnérabilités corrigées", "Score +85 points", "Conformité ISO 27001"] },
+    { slug: "branding-startup", title: "Identité Visuelle Startup", client: "GreenTech Africa", year: 2025, domain: "graphisme", image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=100", description: "Branding complet pour startup green tech : logo, charte, supports marketing.", technologies: ["Illustrator", "Figma", "Premiere Pro"], results: ["Notoriété +120%", "Engagement social +85%", "Prix Design Africa"] },
+  ];
+
+  for (const p of projects) {
+    await prisma.project.create({ data: p });
+  }
+  console.log(`${projects.length} projects seeded.`);
+
+  const teamMembers = [
+    { name: "Yédydia KPLOYA", role: "Fondateur & CEO", bio: "Visionnaire technologique passionné par l'innovation et le développement de solutions numériques pour l'Afrique.", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=100", specialties: ["Architecture", "Leadership", "Stratégie"], orderIndex: 1 },
+    { name: "Sarah KIKI", role: "Directrice Technique (CTO)", bio: "Experte full-stack avec une passion pour les architectures scalables et le cloud computing.", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&q=100", specialties: ["Full-Stack", "Cloud", "DevOps"], orderIndex: 2 },
+    { name: "David HOUNSOU", role: "Lead Développeur", bio: "Maître du code, spécialisé en React/Next.js et systèmes backend haute performance.", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=100", specialties: ["React", "Node.js", "TypeScript"], orderIndex: 3 },
+    { name: "Amina DOSSOU", role: "UI/UX Designer", bio: "Créatrice d'expériences utilisateur mémorables, adepte du design thinking et de l'accessibilité.", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=100", specialties: ["UI/UX", "Figma", "Design System"], orderIndex: 4 },
+    { name: "Patrick ADJOVI", role: "Expert Cybersécurité", bio: "Spécialiste en sécurité offensive et défensive, certifié CEH et OSCP.", image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?w=600&q=100", specialties: ["Pentesting", "SOC", "Audit"], orderIndex: 5 },
+    { name: "Grâce AHOUANNOU", role: "Data Scientist", bio: "Passionnée par l'IA et le machine learning, experte en modèles prédictifs et NLP.", image: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=600&q=100", specialties: ["ML", "NLP", "Python"], orderIndex: 6 },
+  ];
+
+  for (const m of teamMembers) {
+    await prisma.teamMember.create({ data: m });
+  }
+  console.log(`${teamMembers.length} team members seeded.`);
+
+  const testimonials = [
+    { name: "Marc TOGNON", role: "CEO, PayExpress", text: "Innov'Yed Solutions a transformé notre vision en une application robuste qui gère des milliers de transactions quotidiennes. Leur expertise technique est remarquable.", rating: 5, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=100", orderIndex: 1 },
+    { name: "Aïcha BAKO", role: "Directrice, GreenTech Africa", text: "L'identité visuelle créée par Innov'Yed a propulsé notre image de marque. Le design est à la fois moderne et ancré dans notre identité africaine.", rating: 5, avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&q=100", orderIndex: 2 },
+    { name: "Pierre ASSOGBA", role: "CTO, BankOfAfrica", text: "Le chatbot IA développé par Innov'Yed a réduit nos tickets support de 60%. L'innovation au service de l'efficacité opérationnelle.", rating: 5, avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=100", orderIndex: 3 },
+    { name: "Fatima DIALLO", role: "Fondatrice, AfrikFashion", text: "Notre marketplace gère 10 000 commandes par mois sans accroc. L'équipe d'Innov'Yed a livré une plateforme fiable et performante.", rating: 5, avatar: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=200&q=100", orderIndex: 4 },
+  ];
+
+  for (const t of testimonials) {
+    await prisma.testimonial.create({ data: t });
+  }
+  console.log(`${testimonials.length} testimonials seeded.`);
+
+  // Site Settings
+  await prisma.siteSettings.upsert({
+    where: { id: "singleton" },
+    update: {},
+    create: {
+      id: "singleton",
+      siteName: "Innov'Yed Solutions",
+      siteTagline: "Solutions Innovantes",
+      badgeText: "10 Domaines / 127+ Projets Livrés",
+      projectsDelivered: 127,
+      satisfiedClients: 89,
+      yearsExperience: 4,
+      satisfactionRate: 98,
+      phone: "+225 07 09 78 56 24",
+      email: "contact@innovyed.com",
+      whatsapp: "+225 07 09 78 56 24",
+      address: "Abidjan, Côte d'Ivoire",
+    },
+  });
+  console.log("Site settings seeded.");
+
+  // Process Steps
+  await prisma.processStep.deleteMany();
+  const processSteps = [
+    { title: "Analyse", description: "Compréhension approfondie de vos besoins et objectifs", duration: "1-2 semaines", icon: "Search", orderIndex: 0 },
+    { title: "Conception", description: "Design des maquettes et architecture technique", duration: "2-3 semaines", icon: "PenTool", orderIndex: 1 },
+    { title: "Développement", description: "Implémentation agile avec sprints de 2 semaines", duration: "4-8 semaines", icon: "Code", orderIndex: 2 },
+    { title: "Tests", description: "Tests unitaires, E2E, audit performance et sécurité", duration: "1-2 semaines", icon: "CheckCircle", orderIndex: 3 },
+    { title: "Livraison", description: "Déploiement, formation et support hypercare 30 jours", duration: "1 semaine", icon: "Rocket", orderIndex: 4 },
+  ];
+  for (const step of processSteps) {
+    await prisma.processStep.create({ data: step });
+  }
+  console.log(`${processSteps.length} process steps seeded.`);
+
+  // Tech Stack
+  await prisma.techStack.deleteMany();
+  const techStack = ["React", "Next.js", "TypeScript", "Node.js", "Python", "PostgreSQL", "Docker", "AWS", "Tailwind CSS", "Figma", "Git", "Redis", "GraphQL", "Prisma", "Supabase", "Stripe", "Vercel", "Linux"];
+  for (let i = 0; i < techStack.length; i++) {
+    await prisma.techStack.create({ data: { name: techStack[i], orderIndex: i } });
+  }
+  console.log(`${techStack.length} tech stack items seeded.`);
+
+  // Hero Images
+  await prisma.heroImage.deleteMany();
+  const heroImages = [
+    { url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80", alt: "Technology abstract", orderIndex: 0 },
+    { url: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1920&q=80", alt: "Circuit board", orderIndex: 1 },
+    { url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80", alt: "Cybersecurity", orderIndex: 2 },
+    { url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80", alt: "Data analytics", orderIndex: 3 },
+    { url: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=1920&q=80", alt: "Code on screen", orderIndex: 4 },
+  ];
+  for (const img of heroImages) {
+    await prisma.heroImage.create({ data: img });
+  }
+  console.log(`${heroImages.length} hero images seeded.`);
+
+  // Company Advantages
+  await prisma.companyAdvantage.deleteMany();
+  const advantages = [
+    { title: "Expertise Technique", description: "Une équipe de développeurs certifiés maîtrisant les technologies les plus récentes", icon: "Code2", color: "cyan", orderIndex: 0 },
+    { title: "Innovation Continue", description: "Nous intégrons l'IA et l'automatisation dans chaque solution", icon: "Brain", color: "violet", orderIndex: 1 },
+    { title: "Support 24/7", description: "Une assistance disponible à tout moment pour garantir la continuité de vos opérations", icon: "Headphones", color: "green", orderIndex: 2 },
+    { title: "Résultats Mesurables", description: "Des KPIs clairs et un retour sur investissement tracked en temps réel", icon: "Zap", color: "amber", orderIndex: 3 },
+  ];
+  for (const adv of advantages) {
+    await prisma.companyAdvantage.create({ data: adv });
+  }
+  console.log(`${advantages.length} company advantages seeded.`);
+
+  // FAQs
+  await prisma.fAQ.deleteMany();
+  const faqs = [
+    { question: "Quels services propose Innov'Yed ?", answer: "Nous proposons le développement web et mobile, l'intégration IA, la cybersécurité, le DevOps, le design UI/UX, la data analytics, et bien plus encore.", category: "general", orderIndex: 0 },
+    { question: "Combien coûte un projet ?", answer: "Chaque projet est unique. Contactez-nous pour un devis personnalisé gratuit en fonction de vos besoins spécifiques.", category: "devis", orderIndex: 1 },
+    { question: "Quels sont vos délais de livraison ?", answer: "Un projet standard prend 4 à 8 semaines. Les projets complexes peuvent prendre 3 à 6 mois.", category: "general", orderIndex: 2 },
+    { question: "Proposez-vous un support après livraison ?", answer: "Oui, nous offrons un support hypercare de 30 jours après livraison, puis des contrats de maintenance sur mesure.", category: "support", orderIndex: 3 },
+  ];
+  for (const faq of faqs) {
+    await prisma.fAQ.create({ data: faq });
+  }
+  console.log(`${faqs.length} FAQs seeded.`);
+
+  // Company Values
+  await prisma.companyValue.deleteMany();
+  const values = [
+    { title: "Innovation", description: "Nous repoussons constamment les limites technologiques pour offrir des solutions de pointe", icon: "Lightbulb", color: "cyan", orderIndex: 0 },
+    { title: "Excellence", description: "La qualité est au cœur de chaque ligne de code que nous écrivons", icon: "Star", color: "violet", orderIndex: 1 },
+    { title: "Intégrité", description: "Transparence totale dans nos relations clients et nos processus", icon: "Shield", color: "green", orderIndex: 2 },
+    { title: "Collaboration", description: "Nous travaillons main dans la main avec nos clients pour atteindre leurs objectifs", icon: "Users", color: "amber", orderIndex: 3 },
+    { title: "Impact", description: "Chaque solution est conçue pour générer des résultats mesurables et durables", icon: "Zap", color: "red", orderIndex: 4 },
+    { title: "Accessibilité", description: "La technologie doit être accessible à tous, nous démocratisons le numérique en Afrique", icon: "Globe", color: "cyan", orderIndex: 5 },
+  ];
+  for (const v of values) {
+    await prisma.companyValue.create({ data: v });
+  }
+  console.log(`${values.length} company values seeded.`);
+
+  // Company Timeline
+  await prisma.companyTimeline.deleteMany();
+  const timeline = [
+    { year: "2022", title: "Fondation", description: "Création d'Innov'Yed Solutions à Abidjan avec une vision : démocratiser la technologie en Afrique", icon: "Rocket", orderIndex: 0 },
+    { year: "2022", title: "Premiers Clients", description: "Livraison des 5 premiers projets clients avec un taux de satisfaction de 100%", icon: "Star", orderIndex: 1 },
+    { year: "2023", title: "Expansion", description: "Croissance de l'équipe et lancement de l'académie de formation", icon: "TrendingUp", orderIndex: 2 },
+    { year: "2023", title: "100+ Projets", description: "Franchissement du cap des 100 projets livrés avec succès", icon: "Target", orderIndex: 3 },
+    { year: "2024", title: "Innovation IA", description: "Intégration de l'intelligence artificielle dans tous nos services", icon: "Brain", orderIndex: 4 },
+    { year: "2024", title: "Certifications", description: "Obtention de certifications AWS et partenariats stratégiques", icon: "Award", orderIndex: 5 },
+    { year: "2025", title: "Vision 2030", description: "Lancement du plan stratégique pour devenir le leader tech en Afrique de l'Ouest", icon: "Globe", orderIndex: 6 },
+  ];
+  for (const t of timeline) {
+    await prisma.companyTimeline.create({ data: t });
+  }
+  console.log(`${timeline.length} timeline items seeded.`);
+
+  // Certifications
+  await prisma.certification.deleteMany();
+  const certifications = [
+    { name: "AWS Certified", icon: "Cloud", orderIndex: 0 },
+    { name: "Google Cloud Partner", icon: "Cloud", orderIndex: 1 },
+    { name: "ISO 27001", icon: "Shield", orderIndex: 2 },
+    { name: "Meta Business Partner", icon: "Building", orderIndex: 3 },
+    { name: "Agile Scrum Master", icon: "RefreshCw", orderIndex: 4 },
+    { name: "GDPR Compliant", icon: "Lock", orderIndex: 5 },
+  ];
+  for (const c of certifications) {
+    await prisma.certification.create({ data: c });
+  }
+  console.log(`${certifications.length} certifications seeded.`);
+
+  // Devis Services
+  await prisma.devisService.deleteMany();
+  const devisServices = [
+    { name: "Site Web Vitrine", icon: "Globe", orderIndex: 0 },
+    { name: "Application Mobile", icon: "Smartphone", orderIndex: 1 },
+    { name: "E-Commerce / Marketplace", icon: "ShoppingCart", orderIndex: 2 },
+    { name: "SaaS / Application Web", icon: "Cloud", orderIndex: 3 },
+    { name: "Intégration IA / Chatbot", icon: "Brain", orderIndex: 4 },
+    { name: "DevOps / Infrastructure", icon: "Server", orderIndex: 5 },
+    { name: "Cybersécurité", icon: "Shield", orderIndex: 6 },
+    { name: "Data Analytics / BI", icon: "BarChart3", orderIndex: 7 },
+    { name: "Formation / Consulting", icon: "GraduationCap", orderIndex: 8 },
+  ];
+  for (const s of devisServices) {
+    await prisma.devisService.create({ data: s });
+  }
+  console.log(`${devisServices.length} devis services seeded.`);
+
+  // Devis Budget Ranges
+  await prisma.devisBudget.deleteMany();
+  const devisBudgets = [
+    { label: "< 500 000 FCFA", value: "0-500000", orderIndex: 0 },
+    { label: "500 000 - 1 000 000 FCFA", value: "500000-1000000", orderIndex: 1 },
+    { label: "1 000 000 - 5 000 000 FCFA", value: "1000000-5000000", orderIndex: 2 },
+    { label: "5 000 000 - 10 000 000 FCFA", value: "5000000-10000000", orderIndex: 3 },
+    { label: "> 10 000 000 FCFA", value: "10000000+", orderIndex: 4 },
+  ];
+  for (const b of devisBudgets) {
+    await prisma.devisBudget.create({ data: b });
+  }
+  console.log(`${devisBudgets.length} devis budgets seeded.`);
+
+  // Devis Timelines
+  await prisma.devisTimeline.deleteMany();
+  const devisTimelines = [
+    { label: "< 1 mois", value: "1month", orderIndex: 0 },
+    { label: "1-3 mois", value: "1-3months", orderIndex: 1 },
+    { label: "3-6 mois", value: "3-6months", orderIndex: 2 },
+    { label: "6+ mois", value: "6+months", orderIndex: 3 },
+    { label: "Flexible", value: "flexible", orderIndex: 4 },
+  ];
+  for (const t of devisTimelines) {
+    await prisma.devisTimeline.create({ data: t });
+  }
+  console.log(`${devisTimelines.length} devis timelines seeded.`);
+
+  console.log("Database seeded successfully!");
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());

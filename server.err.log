@@ -1,0 +1,64 @@
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of D:\MES PROJETS\IS\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * D:\MES PROJETS\IS\innovyed-web\package-lock.json
+
+⨯ Error: Could not find the module "[project]/src/app/error.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '4033360876'
+}
+⨯ Error: Could not find the module "[project]/src/app/error.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '1925167548'
+}
+⨯ Error: Could not find the module "[project]/src/app/not-found.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>)
+    at stringify (<anonymous>) {
+  digest: '2399524432'
+}
+⨯ Error: Could not find the module "[project]/src/app/page.tsx#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '1243799736'
+}
+⨯ Error: Could not find the module "[project]/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '2205399892'
+}
+⨯ Error: Could not find the module "[project]/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>) {
+  digest: '2898676155'
+}
+[0m[7m Server [0m Error: Could not find the module "[project]/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '2898676155'
+}
+⨯ Error: Could not find the module "[project]/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '2898676155'
+}
+⨯ Error: Could not find the module "[project]/node_modules/next/dist/client/components/builtin/global-error.js#default" in the React Client Manifest. This is probably a bug in the React Server Components bundler.
+    at stringify (<anonymous>:1:18) {
+  environmentName: 'Server',
+  digest: '2898676155',
+  page: '/'
+}
+⨯ Error: Failed to load external module @swc/helpers-a0de6bd0cb8eca46/_/_interop_require_default: Error: Cannot find module '@swc/helpers-a0de6bd0cb8eca46/_/_interop_require_default'
+Require stack:
+- D:\MES PROJETS\IS\innovyed-web\.next\dev\server\chunks\ssr\[root-of-the-server]__08e_lfq._.js
+- D:\MES PROJETS\IS\innovyed-web\.next\dev\server\chunks\ssr\[turbopack]_runtime.js
+- D:\MES PROJETS\IS\innovyed-web\.next\dev\server\app\page.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\server\require.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\server\load-components.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\build\utils.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\server\lib\router-utils\setup-dev-bundler.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\server\lib\router-server.js
+- D:\MES PROJETS\IS\innovyed-web\node_modules\next\dist\server\lib\start-server.js
+    at module evaluation (D:\MES PROJETS\IS\innovyed-web\.next\dev\server\chunks\ssr\[root-of-the-server]__08e_lfq._.js:28:35)
+    at Object.<anonymous> (D:\MES PROJETS\IS\innovyed-web\.next\dev\server\pages\_document.js:3:3)

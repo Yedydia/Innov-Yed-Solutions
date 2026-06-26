@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Innov'Yed Solutions</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e27; color: white; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .card { text-align: center; padding: 3rem; }
+    .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #06B6D4, #3B82F6); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; margin: 0 auto 2rem; box-shadow: 0 0 40px rgba(6,182,212,0.3); }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    p { color: #8892b0; margin-bottom: 2rem; }
+    .btn { display: inline-block; padding: 1rem 2.5rem; background: linear-gradient(135deg, #06B6D4, #3B82F6); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 1rem; transition: all 0.3s; box-shadow: 0 0 20px rgba(6,182,212,0.2); }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(6,182,212,0.4); }
+    .spinner { display: none; margin-top: 1rem; color: #06B6D4; font-size: 0.85rem; }
+    .spinner.show { display: block; }
+    .error { display: none; margin-top: 1rem; color: #EF4444; font-size: 0.85rem; }
+    .error.show { display: block; }
+    .links { margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .links a { color: #06B6D4; text-decoration: none; font-size: 0.85rem; }
+    .links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">IY</div>
+    <h1>Innov'Yed Solutions</h1>
+    <p>L'Intelligence au Cœur de l'Avenir Numérique</p>
+    <a class="btn" id="launchBtn" href="http://localhost:3000">Accéder au site</a>
+    <div class="spinner" id="spinner">Vérification du serveur...</div>
+    <div class="error" id="error">
+      Le serveur ne semble pas démarré.<br>
+      Lancez <code>npx next dev --webpack</code> dans le dossier du projet, puis réessayez.
+    </div>
+    <div class="links">
+      <a href="http://localhost:3000/portail/auth">Espace Client</a>
+      <a href="http://localhost:3000/admin">Administration</a>
+      <a href="http://localhost:3000/devis">Demander un Devis</a>
+    </div>
+  </div>
+  <script>
+    const btn = document.getElementById('launchBtn');
+    const spinner = document.getElementById('spinner');
+    const error = document.getElementById('error');
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      spinner.classList.add('show');
+      error.classList.remove('show');
+      fetch('http://localhost:3000', { mode: 'no-cors' })
+        .then(() => { window.location.href = 'http://localhost:3000'; })
+        .catch(() => {
+          spinner.classList.remove('show');
+          error.classList.add('show');
+        });
+    });
+  </script>
+</body>
+</html>
