@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { authHeaders } from "@/lib/auth-helpers";
-import { Search, FolderKanban, Clock, ArrowRight, Loader2 } from "lucide-react";
+import { Search, FolderKanban, Clock, ArrowRight, Loader2, Plus, X, Send } from "lucide-react";
 import PortalPageHeader from "@/components/PortalPageHeader";
 
 const statusStyles: Record<string, string> = {
@@ -36,6 +36,11 @@ export default function ProjetsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("tous");
+  const [showModal, setShowModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [newRef, setNewRef] = useState("");
+  const [form, setForm] = useState({ service: "", description: "", budget: "" });
 
   useEffect(() => {
     let cancelled = false;
@@ -52,6 +57,28 @@ export default function ProjetsPage() {
     return matchSearch && matchFilter;
   });
 
+  const handleSubmit = async () => {
+    if (!form.service.trim() || !form.description.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/portail/devis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...authHeaders() },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNewRef(data.reference);
+        setSubmitted(true);
+        setForm({ service: "", description: "", budget: "" });
+        setDevis((prev) => [{ id: data.id, reference: data.reference, service: form.service, status: "en_attente", description: form.description, budget: form.budget || null, createdAt: new Date().toISOString() }, ...prev]);
+      }
+    } catch {}
+    setSubmitting(false);
+  };
+
+  const openModal = () => { setShowModal(true); setSubmitted(false); setNewRef(""); };
+
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <PortalPageHeader title="Mes Projets" subtitle="Suivez l'avancement de vos projets" image="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1920&q=80" />
@@ -60,6 +87,9 @@ export default function ProjetsPage() {
           <h1 className="font-display text-2xl font-bold text-white">Mes Projets</h1>
           <p className="text-gray-400 text-sm mt-1">{devis.length} projets au total</p>
         </div>
+        <button onClick={openModal} className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm text-white transition-all hover:shadow-lg hover:shadow-cyan/20 active:scale-95" style={{ background: "linear-gradient(135deg, #06B6D4, #8B5CF6)" }}>
+          <Plus className="w-4 h-4" /> Nouveau Projet
+        </button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
@@ -103,6 +133,60 @@ export default function ProjetsPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !submitting && setShowModal(false)} />
+          <div className="relative w-full max-w-lg bg-[#0D1525] border border-white/[0.08] rounded-2xl p-6 shadow-2xl">
+            <button onClick={() => !submitting && setShowModal(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"><X className="w-5 h-5" /></button>
+
+            {submitted ? (
+              <div className="text-center py-6">
+                <div className="w-16 h-16 rounded-full bg-green/20 flex items-center justify-center mx-auto mb-4"><Send className="w-8 h-8 text-green" /></div>
+                <h3 className="font-display text-xl font-bold text-white mb-2">Demande Envoyée !</h3>
+                <p className="text-gray-400 text-sm mb-4">Votre demande de devis a bien été enregistrée. Notre équipe vous contactera sous 24h.</p>
+                <p className="text-xs text-gray-500">Référence : <span className="text-cyan font-mono">{newRef}</span></p>
+                <button onClick={() => setShowModal(false)} className="mt-6 px-6 py-2.5 rounded-xl text-sm font-medium text-white bg-cyan/20 border border-cyan/30 hover:bg-cyan/30 transition-all">Fermer</button>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-display text-lg font-bold text-white mb-1">Nouveau Projet</h3>
+                <p className="text-gray-400 text-sm mb-5">Décrivez votre projet pour obtenir un devis.</p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Service *</label>
+                    <input value={form.service} onChange={(e) => setForm({ ...form, service: e.target.value })} placeholder="Ex: Développement web, Maintenance..." className="w-full px-4 py-2.5 bg-[#0A1020] border border-white/[0.06] rounded-xl text-sm text-white focus:outline-none focus:border-cyan/40 transition-all placeholder:text-gray-600" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Budget estimé</label>
+                    <select value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} className="w-full px-4 py-2.5 bg-[#0A1020] border border-white/[0.06] rounded-xl text-sm text-white focus:outline-none focus:border-cyan/40 transition-all">
+                      <option value="">Non précisé</option>
+                      <option value="< 500 000 FCFA">&lt; 500 000 FCFA</option>
+                      <option value="500 000 — 2 000 000 FCFA">500 000 — 2 000 000 FCFA</option>
+                      <option value="2 000 000 — 5 000 000 FCFA">2 000 000 — 5 000 000 FCFA</option>
+                      <option value="5 000 000 — 10 000 000 FCFA">5 000 000 — 10 000 000 FCFA</option>
+                      <option value="> 10 000 000 FCFA">&gt; 10 000 000 FCFA</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Description *</label>
+                    <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} placeholder="Décrivez votre projet en détail..." className="w-full px-4 py-2.5 bg-[#0A1020] border border-white/[0.06] rounded-xl text-sm text-white focus:outline-none focus:border-cyan/40 transition-all placeholder:text-gray-600 resize-none" />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 mt-6">
+                  <button onClick={() => setShowModal(false)} disabled={submitting} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white border border-white/[0.06] hover:border-white/[0.12] transition-all">Annuler</button>
+                  <button onClick={handleSubmit} disabled={submitting || !form.service.trim() || !form.description.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-cyan/20 disabled:opacity-40 disabled:cursor-not-allowed" style={{ background: "linear-gradient(135deg, #06B6D4, #8B5CF6)" }}>
+                    {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {submitting ? "Envoi..." : "Envoyer la demande"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
