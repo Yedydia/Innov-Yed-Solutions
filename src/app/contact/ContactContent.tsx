@@ -11,8 +11,8 @@ import {
 } from "lucide-react";
 
 const defaultContactMethods = [
-  { icon: Phone, label: "Téléphone", value: "+229 01 92 72 83 64", desc: "Lun-Ven 8h-18h", action: "tel:+22901927283" },
-  { icon: Mail, label: "Email", value: "innoyedsolutions@gmail.com", desc: "Réponse sous 24h", action: "mailto:innoyedsolutions@gmail.com" },
+  { icon: Phone, label: "Téléphone", value: "+229 01 92 72 83 64", desc: "Lun-Ven 8h-18h", action: "tel:+2290192728364" },
+  { icon: Mail, label: "Email", value: "innovyedsolutions@gmail.com", desc: "Réponse sous 24h", action: "mailto:innovyedsolutions@gmail.com" },
   { icon: MessageCircle, label: "WhatsApp", value: "+229 92 72 83 64", desc: "Réponse immédiate", action: "https://wa.me/22992728364" },
   { icon: MapPin, label: "Adresse", value: "Cotonou, Bénin", desc: "Quartier Godomey", action: "#" },
 ];

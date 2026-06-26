@@ -28,8 +28,9 @@ const SYSTEM_PROMPT = `Tu es Innov'Bot, l'assistant IA intelligent d'Innov'Yed S
 - DevOps & Cloud Computing - 120 000 FCFA - 10 semaines
 
 ### Contact
-- Téléphone : +229 92 72 83 64
-- Email : innoyedsolutions@gmail.com
+- Téléphone : +229 01 92 72 83 64
+- Email : innovyedsolutions@gmail.com
+- WhatsApp : +229 92 72 83 64
 - Adresse : Cotonou, Bénin
 - Site : innovyed-solutions.com
 
@@ -84,7 +85,7 @@ function getAIResponse(userMsg: string, history: { role: string; content: string
       return "🎓 **Académie Innov'Yed**\n\nNos formations phares :\n• JavaScript Zéro à Héros — 75 000 FCFA\n• Cybersécurité Essentielle — 95 000 FCFA\n• React & Next.js — 150 000 FCFA\n• Python Data Science — 85 000 FCFA\n\n👉 [Voir le catalogue](/academie)";
     }
     if (/maintenance|réparation|ordinateur|pc|fixe|portable/i.test(lower)) {
-      return "🔧 **Maintenance & Réparation**\n\nNous réparons :\n• Ordinateurs fixes et portables\n• Écrans, claviers, composants\n• Maintenance préventive\n• Nettoyage et optimisation\n\n💰 À partir de 15 000 FCFA\n\n👉 [Créez un ticket](/portail/tickets) ou appelez le +229 92 72 83 64";
+      return "🔧 **Maintenance & Réparation**\n\nNous réparons :\n• Ordinateurs fixes et portables\n• Écrans, claviers, composants\n• Maintenance préventive\n• Nettoyage et optimisation\n\n💰 À partir de 15 000 FCFA\n\n👉 [Créez un ticket](/portail/tickets) ou appelez le +229 01 92 72 83 64";
     }
     if (/énergie|ondule|batterie|alimentation/i.test(lower)) {
       return "🔋 **Énergie & Accessoires**\n\n• Onduleurs et batteries\n• Alimentations informatiques\n• Multiprises sécurisées\n• Conseils en autonomie électrique\n\n👉 [Découvrez nos produits](/boutique)";
@@ -99,7 +100,7 @@ function getAIResponse(userMsg: string, history: { role: string; content: string
       return "📋 **Service de Bureau**\n\n• Gestion administrative\n• Secrétariat délégué\n• Organisation d'événements\n• Support de direction\n\n👉 [Contactez-nous](/contact) pour en savoir plus.";
     }
     if (/support|aide|dépannage|assistance/i.test(lower)) {
-      return "🎧 **Support Technique**\n\n• Assistance à distance\n• Intervention sur site\n• Dépannage urgent\n• Maintenance contractuelle\n\n📞 +229 92 72 83 64\n📧 innoyedsolutions@gmail.com\n\n👉 [Créez un ticket](/portail/tickets)";
+      return "🎧 **Support Technique**\n\n• Assistance à distance\n• Intervention sur site\n• Dépannage urgent\n• Maintenance contractuelle\n\n📞 +229 01 92 72 83 64\n📧 innovyedsolutions@gmail.com\n\n👉 [Créez un ticket](/portail/tickets)";
     }
     if (/donnée|récupération|optimisation|sauvegarde/i.test(lower)) {
       return "⚡ **Optimisation & Récupération**\n\n• Récupération de données perdues\n• Optimisation de performance\n• Sauvegarde et restauration\n• Nettoyage système\n\n💰 Devis gratuit\n👉 [Demandez un devis](/devis)";
@@ -119,12 +120,12 @@ function getAIResponse(userMsg: string, history: { role: string; content: string
 
   // Support / problème
   if (/problème|bug|erreur|panne|ne fonctionne|cassé|planté|bloqué/i.test(lower)) {
-    return "🛠️ **Je suis là pour vous aider !**\n\nPour résoudre votre problème :\n\n1. **Créez un ticket** — un technicien vous répond sous 4h\n2. **Appelez-nous** — +229 92 72 83 64 (urgence)\n3. **Email** — innoyedsolutions@gmail.com\n\n👉 [Créer un ticket](/portail/tickets)\n\nDécrivez-moi votre problème et je vous guide !";
+    return "🛠️ **Je suis là pour vous aider !**\n\nPour résoudre votre problème :\n\n1. **Créez un ticket** — un technicien vous répond sous 4h\n2. **Appelez-nous** — +229 01 92 72 83 64 (urgence)\n3. **Email** — innovyedsolutions@gmail.com\n\n👉 [Créer un ticket](/portail/tickets)\n\nDécrivez-moi votre problème et je vous guide !";
   }
 
   // Contact
   if (/contact|téléphone|email|adresse|appeler|écrire|joindre/i.test(lower)) {
-    return "📞 **Contactez-nous**\n\n• 📱 +229 92 72 83 64\n• 📧 innoyedsolutions@gmail.com\n• 📍 Cotonou, Bénin\n• 🌐 innovyed-solutions.com\n\n⏰ Lun-Sam : 8h-18h\n\n👉 [Formulaire de contact](/contact)";
+    return "📞 **Contactez-nous**\n\n• 📱 +229 01 92 72 83 64\n• 📧 innovyedsolutions@gmail.com\n• 📍 Cotonou, Bénin\n• 🌐 innovyed-solutions.com\n\n⏰ Lun-Sam : 8h-18h\n\n👉 [Formulaire de contact](/contact)";
   }
 
   // Portfolio / réalisations
@@ -149,7 +150,7 @@ function getAIResponse(userMsg: string, history: { role: string; content: string
 
   // Plainte / mécontentement
   if (/mécontent|insatisfait|plainte|mauvais|nul|arnaque|furieux|énervé|problème de service/i.test(lower)) {
-    return "😔 Je comprends votre frustration et je m'en excuse.\n\nNous prenons très au sérieux votre retour. Pour une résolution rapide :\n\n1. 📞 Appelez le +229 92 72 83 64\n2. 📧 Email : innoyedsolutions@gmail.com\n3. 💬 [Créez un ticket prioritaire](/portail/tickets)\n\nUn responsable vous contactera sous 2h.";
+    return "😔 Je comprends votre frustration et je m'en excuse.\n\nNous prenons très au sérieux votre retour. Pour une résolution rapide :\n\n1. 📞 Appelez le +229 01 92 72 83 64\n2. 📧 Email : innovyedsolutions@gmail.com\n3. 💬 [Créez un ticket prioritaire](/portail/tickets)\n\nUn responsable vous contactera sous 2h.";
   }
 
   // Qui es-tu

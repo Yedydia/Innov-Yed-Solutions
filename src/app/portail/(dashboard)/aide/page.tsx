@@ -97,15 +97,15 @@ const faqCategories = [
       },
       {
         q: "Comment supprimer mon compte ?",
-        a: "Contactez-nous par email à contact@innovyed.com ou via un ticket support. La suppression de votre compte sera effectuée sous 30 jours avec conservation des données légales.",
+        a: "Contactez-nous par email à innovyedsolutions@gmail.com ou via un ticket support. La suppression de votre compte sera effectuée sous 30 jours avec conservation des données légales.",
       },
     ],
   },
 ];
 
 const contactMethods = [
-  { icon: Mail, label: "Email", value: "support@innovyed.com", desc: "Réponse sous 24h", color: "cyan" },
-  { icon: Phone, label: "Téléphone", value: "+229 01 97 00 00 00", desc: "Lun-Ven 8h-18h", color: "violet" },
+  { icon: Mail, label: "Email", value: "innovyedsolutions@gmail.com", desc: "Réponse sous 24h", color: "cyan" },
+  { icon: Phone, label: "Téléphone", value: "+229 01 92 72 83 64", desc: "Lun-Ven 8h-18h", color: "violet" },
   { icon: MessageSquare, label: "Ticket", value: "Espace client → Tickets", desc: "Suivi en temps réel", color: "amber" },
 ];
 

@@ -118,11 +118,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-white/60">
                 <Mail className="w-4 h-4 text-cyan flex-shrink-0" />
-                <a href="mailto:innoyedsolutions@gmail.com" className="hover:text-cyan transition-colors">innoyedsolutions@gmail.com</a>
+                <a href="mailto:innovyedsolutions@gmail.com" className="hover:text-cyan transition-colors">innovyedsolutions@gmail.com</a>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/60">
                 <Phone className="w-4 h-4 text-cyan flex-shrink-0" />
-                <a href="tel:+22992728364" className="hover:text-cyan transition-colors">+229 92 72 83 64</a>
+                <a href="tel:+2290192728364" className="hover:text-cyan transition-colors">+229 01 92 72 83 64</a>
               </li>
             </ul>
             <h3 className="font-semibold text-sm uppercase tracking-wider text-white/40 mb-3">Newsletter</h3>
