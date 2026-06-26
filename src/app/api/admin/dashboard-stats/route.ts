@@ -37,9 +37,9 @@ export async function GET(request: Request) {
     const months = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"];
     const monthlyRevenue = months.map((label, idx) => {
       const monthOrders = monthlyOrders.filter(
-        (o) => o.createdAt.getMonth() === idx && (o.status === "confirmee" || o.status === "livree")
+        (o: { createdAt: Date; status: string; total: number }) => o.createdAt.getMonth() === idx && (o.status === "confirmee" || o.status === "livree")
       );
-      const total = monthOrders.reduce((s, o) => s + o.total, 0);
+      const total = monthOrders.reduce((s: number, o: { total: number }) => s + o.total, 0);
       return { label, revenue: total };
     });
 
