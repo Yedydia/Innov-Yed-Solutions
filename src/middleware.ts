@@ -8,11 +8,22 @@ function getTokenFromRequest(request: NextRequest): string | null {
   return null;
 }
 
+function base64UrlDecode(str: string): string {
+  const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
+  return decodeURIComponent(
+    atob(padded)
+      .split("")
+      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+      .join("")
+  );
+}
+
 function parseJwtPayload(token: string): { id?: string; email?: string; role?: string; exp?: number } | null {
   try {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
-    const payload = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf-8"));
+    const payload = JSON.parse(base64UrlDecode(parts[1]));
     if (payload.exp && payload.exp * 1000 < Date.now()) return null;
     return payload;
   } catch {
