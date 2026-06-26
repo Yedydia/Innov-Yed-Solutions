@@ -297,20 +297,57 @@ export default function AuthPage() {
                           </>
                         )}
                         {step === 2 && (
-                          <>
-                            <NebulaInput icon={Lock} type="password" placeholder="8+ caractères" value={form.password} onChange={(v: string) => setForm({ ...form, password: v })} label="Mot de passe" required />
-                            <NebulaInput icon={Lock} type="password" placeholder="Confirmez" value={form.confirm} onChange={(v: string) => setForm({ ...form, confirm: v })} label="Confirmer" required />
-                            {passError && <p className="text-red-400 text-xs flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-red-400" />{passError}</p>}
+                           <>
+                             <NebulaInput icon={Lock} type="password" placeholder="8+ caractères" value={form.password} onChange={(v: string) => setForm({ ...form, password: v })} label="Mot de passe" required />
+                             <NebulaInput icon={Lock} type="password" placeholder="Confirmez" value={form.confirm} onChange={(v: string) => setForm({ ...form, confirm: v })} label="Confirmer" required />
+                             {passError && <p className="text-red-400 text-xs flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-red-400" />{passError}</p>}
 
-                            <div className="bg-white/[0.02] rounded-xl p-4 border border-white/[0.05]">
-                              <p className="text-xs font-semibold text-gray-300 mb-2.5">Exigences :</p>
-                              <div className="space-y-1.5">
-                                {passwordReq.map((req) => {
-                                  const met = req.check(form.password);
-                                  return (
-                                    <div key={req.label} className={`flex items-center gap-2 text-[11px] ${met ? "text-green-400" : "text-gray-500"}`}>
-                                      <span className={`text-xs font-bold ${met ? "text-green-400" : "text-gray-600"}`}>{met ? "\u2713" : "\u2717"}</span>
-                                      {req.label}
+                             <div className="bg-white/[0.02] rounded-xl p-4 border border-white/[0.05]">
+                               <p className="text-xs font-semibold text-gray-300 mb-2.5">Exigences :</p>
+                               <div className="space-y-1.5">
+                                 {passwordReq.map((req) => {
+                                   const met = req.check(form.password);
+                                   return (
+                                     <div key={req.label} className={`flex items-center gap-2 text-[11px] ${met ? "text-green-400" : "text-gray-500"}`}>
+                                       <span className={`text-xs font-bold ${met ? "text-green-400" : "text-gray-600"}`}>{met ? "\u2713" : "\u2717"}</span>
+                                       {req.label}
+                                     </div>
+                                   );
+                                 })}
+                               </div>
+                             </div>
+
+                             <label className="flex items-start gap-2 text-xs text-gray-500 cursor-pointer hover:text-gray-400 transition-colors">
+                               <input type="checkbox" className="accent-cyan mt-0.5 rounded w-3.5 h-3.5" />
+                               <span>J&apos;accepte les <a href="#" className="text-cyan/60 hover:text-cyan">conditions</a></span>
+                             </label>
+
+                             <div className="flex gap-3 pt-1">
+                               <button type="button" onClick={() => setStep(1)} className="px-6 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-sm font-medium text-gray-300 hover:bg-white/[0.08] transition-all active:scale-[0.98]">
+                                 Retour
+                               </button>
+                               <button ref={btnRef} onMouseMove={handleBtnMouseMove} className="flex-1 nebula-btn py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 active:scale-[0.98]" style={{ background: `radial-gradient(circle at ${btnPos.x}% ${btnPos.y}%, #22d3ee, #4F46E5 60%, #7C3AED)` }}>
+                                 Créer <ArrowRight className="w-4 h-4" />
+                               </button>
+                             </div>
+                           </>
+                         )}
+                       </form>
+                     </div>
+                   )}
+                 </div>
+               )}
+
+               {/* Security note */}
+               <div className="mt-8 flex items-center justify-center gap-2 text-[11px] text-gray-600">
+                 <Shield className="w-3 h-3" />
+                 Sécurisé & crypté
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+
       {/* Forgot Password Modal */}
       {showForgot && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -352,42 +389,6 @@ export default function AuthPage() {
           </div>
         </div>
       )}
-    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-
-                            <label className="flex items-start gap-2 text-xs text-gray-500 cursor-pointer hover:text-gray-400 transition-colors">
-                              <input type="checkbox" className="accent-cyan mt-0.5 rounded w-3.5 h-3.5" />
-                              <span>J&apos;accepte les <a href="#" className="text-cyan/60 hover:text-cyan">conditions</a></span>
-                            </label>
-
-                            <div className="flex gap-3 pt-1">
-                              <button type="button" onClick={() => setStep(1)} className="px-6 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl text-sm font-medium text-gray-300 hover:bg-white/[0.08] transition-all active:scale-[0.98]">
-                                Retour
-                              </button>
-                              <button ref={btnRef} onMouseMove={handleBtnMouseMove} className="flex-1 nebula-btn py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 active:scale-[0.98]" style={{ background: `radial-gradient(circle at ${btnPos.x}% ${btnPos.y}%, #22d3ee, #4F46E5 60%, #7C3AED)` }}>
-                                Créer <ArrowRight className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </>
-                        )}
-                      </form>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Security note */}
-              <div className="mt-8 flex items-center justify-center gap-2 text-[11px] text-gray-600">
-                <Shield className="w-3 h-3" />
-                Sécurisé & crypté
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
