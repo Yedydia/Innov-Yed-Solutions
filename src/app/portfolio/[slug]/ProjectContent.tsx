@@ -88,7 +88,7 @@ export default function ProjectDetailPage() {
   return (
     <div>
       <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0"><Image src={project.image} alt={project.title} fill sizes="100vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-b from-navy/70 to-[var(--background)]" /></div>
+        <div className="absolute inset-0"><Image src={project.image} alt={project.title} fill sizes="100vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" className="object-cover" /><div className="absolute inset-0 bg-gradient-to-br from-[#0B0F1A]/95 via-[#0B0F1A]/85 to-[#0B0F1A]/90" /><div className="absolute inset-0 bg-gradient-to-t from-[#0B0F1A]/90 via-[#0B0F1A]/70 to-transparent" /></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <nav className="flex items-center gap-2 text-sm text-white/50 mb-8"><Link href="/" className="hover:text-cyan"><Home className="w-4 h-4" /></Link><span>/</span><Link href="/portfolio" className="hover:text-cyan">Portfolio</Link><span>/</span><span className="text-white">{project.title}</span></nav>
           <div className="flex gap-2 mb-4"><span className="px-3 py-1 rounded-full glass text-white text-xs">{project.year}</span><span className="px-3 py-1 rounded-full glass text-white text-xs">{project.client}</span></div>

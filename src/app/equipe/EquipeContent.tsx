@@ -112,7 +112,7 @@ export default function TeamPage() {
               <div key={m.name} className="group rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] hover:shadow-xl transition-all hover:-translate-y-1">
                 <div className="relative aspect-[3/4] overflow-hidden">
                   <Image src={m.image} alt={m.name} fill sizes="320px" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxYTFhM2IiIC8+PC9zdmc+" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/80 to-black/40" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                     <h3 className="text-xl font-bold">{m.name}</h3>
                     <p className="text-cyan text-sm">{m.role}</p>

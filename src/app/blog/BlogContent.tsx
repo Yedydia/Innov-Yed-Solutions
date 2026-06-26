@@ -73,7 +73,7 @@ export default function BlogPage() {
   return (
     <div>
       <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0"><Image src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=2400&q=100" alt="" fill className="object-cover" priority sizes="100vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" /><div className="absolute inset-0 bg-gradient-to-b from-navy/70 via-navy/60 to-[var(--background)]" /></div>
+        <div className="absolute inset-0"><Image src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=2400&q=100" alt="" fill className="object-cover" priority sizes="100vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" /><div className="absolute inset-0 bg-gradient-to-br from-[#0B0F1A]/95 via-[#0B0F1A]/85 to-[#0B0F1A]/90" /><div className="absolute inset-0 bg-gradient-to-t from-[#0B0F1A]/90 via-[#0B0F1A]/70 to-transparent" /></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${pageColor}33, ${pageColor}66)` }}>
@@ -116,7 +116,7 @@ export default function BlogPage() {
             <Link href={`/blog/${filtered.find((a) => a.featured)!.slug}`} className="group block mb-10">
               <div className="relative rounded-2xl overflow-hidden aspect-[21/9]">
                 <Image src={filtered.find((a) => a.featured)!.image} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" placeholder="blur" blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwYTBhMjciIC8+PC9zdmc+" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/80 to-black/40" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <span className="px-3 py-1 rounded-full bg-cyan/20 text-cyan text-xs font-medium mb-3 inline-block">{filtered.find((a) => a.featured)!.category}</span>
                   <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 group-hover:text-cyan transition-colors">{filtered.find((a) => a.featured)!.title}</h2>
