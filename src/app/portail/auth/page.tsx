@@ -18,6 +18,10 @@ export default function AuthPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", password: "", confirm: "" });
   const [error, setError] = useState("");
   const [passError, setPassError] = useState("");
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotSent, setForgotSent] = useState(false);
 
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -229,7 +233,7 @@ export default function AuthPage() {
                     <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer hover:text-gray-400 transition-colors">
                       <input type="checkbox" className="accent-cyan rounded w-3.5 h-3.5" /> Se souvenir
                     </label>
-                    <a href="#" className="text-xs text-cyan/60 hover:text-cyan transition-colors">Mot de passe oublié ?</a>
+                    <button type="button" onClick={() => setShowForgot(true)} className="text-xs text-cyan/60 hover:text-cyan transition-colors">Mot de passe oublié ?</button>
                   </div>
                   <button ref={btnRef} onMouseMove={handleBtnMouseMove} className="nebula-btn w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all duration-300 active:scale-[0.98]" style={{ background: `radial-gradient(circle at ${btnPos.x}% ${btnPos.y}%, #22d3ee, #4F46E5 60%, #7C3AED)` }}>
                     Se connecter <ArrowRight className="w-4 h-4" />
@@ -307,7 +311,48 @@ export default function AuthPage() {
                                     <div key={req.label} className={`flex items-center gap-2 text-[11px] ${met ? "text-green-400" : "text-gray-500"}`}>
                                       <span className={`text-xs font-bold ${met ? "text-green-400" : "text-gray-600"}`}>{met ? "\u2713" : "\u2717"}</span>
                                       {req.label}
-                                    </div>
+      {/* Forgot Password Modal */}
+      {showForgot && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !forgotLoading && setShowForgot(false)} />
+          <div className="relative w-full max-w-sm bg-[#0D1525] border border-white/[0.08] rounded-2xl p-6 shadow-2xl">
+            {forgotSent ? (
+              <div className="text-center py-4">
+                <div className="w-14 h-14 rounded-full bg-cyan/20 flex items-center justify-center mx-auto mb-4"><Mail className="w-7 h-7 text-cyan" /></div>
+                <h3 className="font-display text-lg font-bold text-white mb-2">Email envoyé !</h3>
+                <p className="text-gray-400 text-sm mb-5">Si cet email existe, vous recevrez un lien de réinitialisation dans les prochaines minutes.</p>
+                <button onClick={() => { setShowForgot(false); setForgotSent(false); setForgotEmail(""); }} className="px-6 py-2.5 rounded-xl text-sm font-medium text-white bg-cyan/20 border border-cyan/30 hover:bg-cyan/30 transition-all">Fermer</button>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-display text-lg font-bold text-white mb-1">Mot de passe oublié</h3>
+                <p className="text-gray-400 text-sm mb-5">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-1.5">Email</label>
+                    <input type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} placeholder="votre@email.com" className="w-full px-4 py-2.5 bg-[#0A1020] border border-white/[0.06] rounded-xl text-sm text-white focus:outline-none focus:border-cyan/40 transition-all placeholder:text-gray-600" />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 mt-6">
+                  <button onClick={() => setShowForgot(false)} disabled={forgotLoading} className="px-4 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white border border-white/[0.06] hover:border-white/[0.12] transition-all">Annuler</button>
+                  <button onClick={async () => {
+                    if (!forgotEmail.trim()) return;
+                    setForgotLoading(true);
+                    try {
+                      const res = await fetch("/api/auth/forgot-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: forgotEmail }) });
+                      if (res.ok) setForgotSent(true);
+                    } catch {}
+                    setForgotLoading(false);
+                  }} disabled={forgotLoading || !forgotEmail.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-cyan/20 disabled:opacity-40 disabled:cursor-not-allowed" style={{ background: "linear-gradient(135deg, #06B6D4, #8B5CF6)" }}>
+                    {forgotLoading ? "Envoi..." : "Envoyer le lien"}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
                                   );
                                 })}
                               </div>

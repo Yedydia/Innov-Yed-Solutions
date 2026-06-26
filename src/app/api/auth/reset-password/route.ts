@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import prisma from "@/lib/db";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { token, newPassword } = body;
+    const { token, password } = body;
 
-    if (!token || !newPassword) {
-      return NextResponse.json({ error: "Token et nouveau mot de passe requis" }, { status: 400 });
+    if (!token || !password) {
+      return NextResponse.json({ error: "Token et mot de passe requis" }, { status: 400 });
     }
 
-    if (newPassword.length < 8) {
-      return NextResponse.json({ error: "Mot de passe trop court (8 caractères minimum)" }, { status: 400 });
+    if (password.length < 8) {
+      return NextResponse.json({ error: "Le mot de passe doit contenir au moins 8 caractères" }, { status: 400 });
     }
 
     const user = await prisma.user.findFirst({
@@ -23,10 +23,10 @@ export async function POST(request: Request) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Token invalide ou expiré" }, { status: 400 });
+      return NextResponse.json({ error: "Lien invalide ou expiré" }, { status: 400 });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     await prisma.user.update({
       where: { id: user.id },
@@ -38,8 +38,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, message: "Mot de passe réinitialisé avec succès" });
-  } catch (error) {
-    console.error("Reset password error:", error);
+  } catch {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

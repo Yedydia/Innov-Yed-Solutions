@@ -38,7 +38,7 @@ export async function POST(request: Request) {
         html: `<div>
   <h2>Réinitialiser votre mot de passe</h2>
   <p>Cliquez sur le bouton ci-dessous pour réinitialiser votre mot de passe.</p>
-  <a href="https://innovyed.solutions/reset-password?token=${resetToken}" style="display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 4px;">Réinitialiser le mot de passe</a>
+  <a href="https://innov-yed-solutions.vercel.app/reset-password?token=${resetToken}" style="display: inline-block; padding: 12px 24px; background-color: #2563eb; color: white; text-decoration: none; border-radius: 4px;">Réinitialiser le mot de passe</a>
   <p>Ce lien expire dans 15 minutes.</p>
 </div>`,
       });
