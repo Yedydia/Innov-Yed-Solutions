@@ -26,11 +26,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogPages: MetadataRoute.Sitemap = [];
 
   try {
-    const [services, courses, articles] = await Promise.all([
+    const dbTimeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("DB timeout")), 5000)
+    );
+
+    const dbQuery = Promise.all([
       prisma.service.findMany({ select: { slug: true, updatedAt: true } }),
       prisma.course.findMany({ select: { slug: true, updatedAt: true } }),
       prisma.blogArticle.findMany({ select: { slug: true, updatedAt: true } }),
     ]);
+
+    const [services, courses, articles] = await Promise.race([dbQuery, dbTimeout]) as Awaited<typeof dbQuery>;
 
     servicePages = services.map((s) => ({
       url: `${baseUrl}/services/${s.slug}`,
